@@ -8,6 +8,7 @@
 
 using namespace std;
 
+#define MAXSIZE 5
 #define MAXQUEUE 31
 #define MAXCONTAINER 10
 
@@ -20,6 +21,7 @@ using namespace std;
 #include "SimpleItemType.h"
 #include "TempType.h"
 #include "StorageType.h"
+#include "ContainerType.h"
 
 #include "Application.h"
 
