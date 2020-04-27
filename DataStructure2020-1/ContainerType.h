@@ -5,15 +5,80 @@ class ContainerType
 public:
 	ContainerType();
 	ContainerType(int InContainerId);
-	ContainerType(int InContainerId, string InLocation);
 	~ContainerType();
 
 	/*
-		@brief	m_ContainerId를 가져온다
-		@pre	ContainerType이 initialize 돼야한다.
+		@brief	m_Id를 가져온다
+		@pre	none
 		@post	none
+		@return	return m_Id
 	*/
-	int GetContainerId() const;
+	int GetId() const;
+
+	/*
+		@brief	m_Location를 가져온다
+		@pre	none
+		@post	none
+		@return	return m_Location
+	*/
+	string GetLocation() const;
+
+	/*
+		@brief	Id를 설정한다
+		@pre	none
+		@post	m_Id = InId
+		@param	InId	set할 Id
+	*/
+	void SetId(int InId);
+
+	/*
+		@brief	Location을 설정한다
+		@pre	none
+		@post	m_Location = InLocation
+		@param	InLocation	set할 Location
+	*/
+	void SetLocation(string InLocation);
+
+	/*
+		@brief	Id를 키보드로부터 받아 설정한다
+		@pre	none
+		@post	Id가 키보드로부터 받아온 값으로 set된다.
+	*/
+	void SetIdFromKB();
+
+	/*
+		@brief	Location을 키보드로부터 받아 설정한다
+		@pre	none
+		@post	Location이 키보드로부터 받아온 값으로 set된다.
+	*/
+	void SetLocationFromKB();
+	/*
+		@brief	Container의 기본정보를 키보드로부터 받아 설정한다.
+		@pre	none
+		@post	Container의 Location과 Id를 키보드로부터 받아 설정된다.
+	*/
+	void SetContainerFromKB();
+
+	/*
+		@brief	Id를 출력한다.
+		@pre	none
+		@post	Id가 화면에 출력된다.
+	*/
+	void DisplayIdOnScreen();
+
+	/*
+		@brief	Location을 출력한다.
+		@pre	none
+		@post	Location이 화면에 출력된다.
+	*/
+	void DisplayLocationOnScreen();
+
+	/*
+		@brief	Container의 정보를 출력한다
+		@pre	none
+		@post	Container의 Id와 Location이 출력된다.
+	*/
+	void DisplayContainerOnScreen();
 
 	/*
 		@brief	item을 SimpleItem로 바꾸고 m_SimpleItemList에 item을 추가한다.
@@ -102,22 +167,22 @@ public:
 	bool FindByKind(SimpleItemType& item);
 
 	bool operator==(const ContainerType& container) {
-		if (GetContainerId() == container.GetContainerId()) return true;
+		if (GetId() == container.GetId()) return true;
 		return false;
 	}
 
 	bool operator>(const ContainerType& container) {
-		if (GetContainerId() > container.GetContainerId()) return true;
+		if (GetId() > container.GetId()) return true;
 		return false;
 	}
 
 	bool operator<(const ContainerType& container) {
-		if (GetContainerId() < container.GetContainerId()) return true;
+		if (GetId() < container.GetId()) return true;
 		return false;
 	}
 
 private:
-	int m_ContainerId;
+	int m_Id;
 	string m_Location;
 	UnSortedList<string> m_PhotoList;
 	UnSortedList<SimpleItemType> m_SimpleItemList;

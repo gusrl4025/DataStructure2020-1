@@ -256,6 +256,7 @@ public:
 private:
 	SortedList<ItemType> m_MasterList;
 	TempType m_TempList;
+	StorageType m_ContainerList;
 	SortedList<ContainerType> m_ContainerList;
 	int m_Command;
 };

@@ -81,6 +81,15 @@ public:
 	bool UpdateContainer(const ContainerType& container);
 
 	/*
+		@brief	다음 container를 불러온다
+		@pre	containerList가 초기화돼야한다.
+		@post	parameter가 다음 container를 참조함
+		@param	container	다음 container를 참조함
+		@return 다음 container가 있으면 return true, 아니면 return false
+	*/
+	bool GetNextContainer(ContainerType& container);
+
+	/*
 		@brief	container목록을 출력한다
 		@pre	containerlist가 초기화돼야한다
 		@post	container목록이 출력된다
