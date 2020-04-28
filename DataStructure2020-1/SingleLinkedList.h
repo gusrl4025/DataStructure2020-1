@@ -36,7 +36,7 @@ public:
 		@post	none
 		@return m_Length
 	*/
-	int GetLength() const;
+	int GetLength();
 
 	/*
 		@brief	List에 item을 추가한다
@@ -89,6 +89,19 @@ public:
 		@return	next item을 참조하면 return true, 아니면 return false
 	*/
 	bool GetNextItem(T& item);
+
+	void operator=(SingleLinkedList& list) {
+		MakeEmpty();
+		m_Length = 0;
+
+		if (list.GetLength()) {
+			list.ResetList();
+			T item;
+			while (list.GetNextItem(item)) {
+				Add(item);
+			}
+		}
+	}
 };
 
 template<typename T>
@@ -121,7 +134,7 @@ void SingleLinkedList<T>::MakeEmpty()
 }
 
 template<typename T>
-inline int SingleLinkedList<T>::GetLength() const
+inline int SingleLinkedList<T>::GetLength()
 {
 	return m_Length;
 }
@@ -146,15 +159,15 @@ bool SingleLinkedList<T>::Add(const T& item)
 		PredLoc = m_pList;
 		m_pCurPointer = m_pList;
 		while (m_pCurPointer != nullptr) {
-			if (item == m_pCurPointer->info) {
+			if (m_pCurPointer->info == item) {
 				cout << "\t중복된 ID가 있습니다\n";
 				return false;
 			}
-			if (item < m_pCurPointer->info) {
+			if (m_pCurPointer->info > item) {
 				found = true;
 				break;
 			}
-			if (item > m_pCurPointer->info) {
+			if (m_pCurPointer->info < item) {
 				PredLoc = m_pCurPointer;
 				m_pCurPointer = m_pCurPointer->next;
 			}
@@ -180,14 +193,14 @@ bool SingleLinkedList<T>::Get(T& item)
 	m_pCurPointer = m_pList;
 
 	while (m_pCurPointer != nullptr) {
-		if (item == m_pCurPointer->info) {
+		if (m_pCurPointer->info == item) {
 			item = m_pCurPointer->info;
 			return true;
 		}
-		if (item > m_pCurPointer->info) {
+		if (m_pCurPointer->info < item) {
 			m_pCurPointer = m_pCurPointer->next;
 		}
-		if (item < m_pCurPointer->info) {
+		if (m_pCurPointer->info > item) {
 			return false;
 		}
 	}
@@ -245,14 +258,14 @@ inline bool SingleLinkedList<T>::Replace(const T& item)
 	m_pCurPointer = m_pList;
 
 	while (m_pCurPointer != nullptr) {
-		if (item == m_pCurPointer->info) {
-			item = m_pCurPointer->info;
+		if (m_pCurPointer->info == item) {
+			m_pCurPointer->info = item;
 			return true;
 		}
-		if (item > m_pCurPointer->info) {
+		if (m_pCurPointer->info < item) {
 			m_pCurPointer = m_pCurPointer->next;
 		}
-		if (item < m_pCurPointer->info) {
+		if (m_pCurPointer->info > item) {
 			return false;
 		}
 	}

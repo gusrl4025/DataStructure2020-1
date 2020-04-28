@@ -1,4 +1,4 @@
-#include "pch.h"
+#pragma once
 
 template<typename ItemType>
 class SortedList
@@ -142,13 +142,13 @@ bool SortedList<ItemType>::IsFull() const {
 template<typename ItemType>
 int SortedList<ItemType>::Add(const ItemType& data) {
 	if (IsFull()) {
-		ItemType* TempList = new T[m_Length];
+		ItemType* TempList = new ItemType[m_Length];
 		for (int i = 0; i < m_Length; ++i) {
-			TepList[i] = m_Array[i];
+			TempList[i] = m_Array[i];
 		}
 		delete[] m_Array;
 		m_MaxSize += MAXSIZE;
-		m_Array = new T[m_MaxSize];
+		m_Array = new ItemType[m_MaxSize];
 		for (int i = 0; i < m_Length; ++i) {
 			m_Array[i] = TempList[i];
 		}
@@ -162,11 +162,11 @@ int SortedList<ItemType>::Add(const ItemType& data) {
 	int iPos = 0;
 	for (iPos; iPos <= m_Length; iPos++) {
 		if (iPos == m_Length) break;
-		if (m_Array[iPos].CompareByID(data) == EQUAL) {
+		if (m_Array[iPos] == data) {
 			cout << "\t중복된 Id입니다.\n";
 			return false;
 		}
-		if (m_Array[iPos].CompareByID(data) == GREATER) break;
+		if (m_Array[iPos] > data) break;
 	}
 	if (iPos == m_Length) {
 		m_Array[iPos] = data;
@@ -208,7 +208,7 @@ bool SortedList<ItemType>::Retrieve(ItemType& data) {
 			data = m_Array[curPos];
 			return true;
 		}
-		else if (m_Array[curPos].CompareByID(data) == GREATER) return false;
+		else if (m_Array[curPos] > data) return false;
 	}
 	return false;
 }
@@ -225,7 +225,7 @@ bool SortedList<ItemType>::Retrieve_Binary(ItemType& data) {
 
 	while (!found && !(first > last)) {
 		mid = (first + last) / 2;
-		if (m_Array[mid] = data) {
+		if (m_Array[mid] == data) {
 			data = m_Array[mid];
 			found = true;
 			return true;
@@ -252,15 +252,16 @@ bool SortedList<ItemType>::Delete(ItemType data) {
 
 	while (!found && (first > last)) {
 		mid = (first + last) / 2;
-		switch (m_Array[mid].CompareByID(data)) {
-		case EQUAL:
+		if (m_Array[mid] == data) {
 			m_Array[mid] = data;
 			found = true;
 			return true;
-		case GREATER:
+		}
+		if (m_Array[mid] > data) {
 			last = mid - 1;
 			break;
-		case LESS:
+		}
+		if (m_Array[mid] < data) {
 			first = mid + 1;
 			break;
 		}

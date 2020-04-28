@@ -1,4 +1,4 @@
-#include "pch.h"
+#pragma once
 
 class ContainerType
 {
@@ -81,6 +81,13 @@ public:
 	void DisplayContainerOnScreen();
 
 	/*
+		@brief	Container를 비운다.
+		@pre	none
+		@post	Container가 비워진다.
+	*/
+	void MakeEmpty();
+
+	/*
 		@brief	item을 SimpleItem로 바꾸고 m_SimpleItemList에 item을 추가한다.
 		@pre	m_SimpleItemList가 initialize돼야한다
 		@post	m_SimpleItemList에 item이 추가됐다.
@@ -147,6 +154,22 @@ public:
 		@post	m_PhotoList에 있는 모든 photo가 display된다.
 	*/
 	void DisplayAllPhoto();
+
+	/*
+		@brief	Container의 item을 masterlist에서 참조해서 display한다
+		@pre	masterlist가 초기화돼야한다
+		@post	Container의 item 정보가 전부출력된다
+	*/
+	void DisplayAllDetailsItem(SortedList<ItemType>& masterlist);
+
+	/*
+		@brief	SimpleItem의 Id을 입력받아 m_SimpleItemList에서 같은 Name을 가진 item을 참조한다.
+		@pre	m_SimpleItemList가 initialize돼야한다
+		@post	찾으려는 Id을 가진 item이 참조된다.
+		@param	item	param에 찾으려는 item을 참조한다.
+		@return	원하는 item을 찾으면 return true, 아니면 return false
+	*/
+	bool GetItem(SimpleItemType& item);
 
 	/*
 		@brief	SimpleItem의 Name을 입력받아 m_SimpleItemList에서 같은 Name을 가진 item을 참조한다.

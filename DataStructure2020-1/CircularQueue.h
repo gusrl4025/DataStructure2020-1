@@ -154,7 +154,7 @@ inline void Queue<ItemType>::MakeEmpty()
 	m_Queue = new ItemType[m_MaxSize];
 	m_Front = -1;
 	m_Rear = -1;
-	m_CurPointer = -1
+	m_CurPointer = -1;
 }
 
 // Queue의 Rear에 새로운 원소를 넣음
@@ -178,8 +178,8 @@ inline bool Queue<ItemType>::DeQueue(ItemType& item)
 		cout << "\tQueue가 비었습니다\n";
 		return false;
 	}
-	m_front = (m_front + 1) % m_MaxSize;
-	item = m_Queue[m_front];
+	m_Front = (m_Front + 1) % m_MaxSize;
+	item = m_Queue[m_Front];
 	return true;
 }
 

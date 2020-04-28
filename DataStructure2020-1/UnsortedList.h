@@ -7,12 +7,12 @@ public:
 	/*
 	constructor
 	*/
-	UnSortedList() {}
+	UnSortedList();
 
 	/*
 		destructor
 	*/
-	~UnSortedList() {}
+	~UnSortedList();
 
 	/*
 		@brief	make list empty
@@ -114,7 +114,7 @@ UnSortedList<ItemType>::UnSortedList() {
 
 template<typename ItemType>
 UnSortedList<ItemType>::~UnSortedList() {
-	delete[] m_Array;
+	//delete[] m_Array;
 }
 
 template<typename ItemType>
@@ -140,6 +140,7 @@ bool UnSortedList<ItemType>::IsEmpty() const {
 template<typename ItemType>
 bool UnSortedList<ItemType>::IsFull() const {
 	if (m_Length == m_MaxSize) return true;
+	return false;
 }
 
 template<typename ItemType>
@@ -150,17 +151,18 @@ void UnSortedList<ItemType>::ResetList() {
 template<typename ItemType>
 bool UnSortedList<ItemType>::Add(ItemType item) {
 	if (IsFull()) {
-		ItemType* TempList = new T[m_Length];
+		ItemType* TempList = new ItemType[m_Length];
 		for (int i = 0; i < m_Length; ++i) {
-			TepList[i] = m_Array[i];
+			TempList[i] = m_Array[i];
 		}
-		delete[] m_Array;
+		//delete[] m_Array;
 		m_MaxSize += MAXSIZE;
-		m_Array = new T[m_MaxSize];
+		m_Array = new ItemType[m_MaxSize];
 		for (int i = 0; i < m_Length; ++i) {
 			m_Array[i] = TempList[i];
 		}
 		delete[] TempList;
+		return true;
 	}
 	m_Array[m_Length++] = item;
 	return true;
@@ -192,7 +194,7 @@ bool UnSortedList<ItemType>::Delete(ItemType item) {
 }
 
 template<typename ItemType>
-bool UnSortedList<ItemType>::Replace(ItemType data)
+bool UnSortedList<ItemType>::Replace(ItemType item)
 {
 	for (int Pos = 0; Pos < m_Length; Pos++) {
 		if (m_Array[Pos] == item) {

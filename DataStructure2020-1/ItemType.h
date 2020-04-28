@@ -1,4 +1,4 @@
-#include "pch.h"
+#pragma once
 
 class ItemType
 {
@@ -80,6 +80,15 @@ public:
 		return m_ContainerId;
 	}
 
+	/*
+		@brief	get StorageId of Goods
+		@pre	StorageId of Goods is set
+		@post	none
+		@return Id of Goods
+	*/
+	int GetStorageId() const {
+		return m_StorageId;
+	}
 
 	/*
 		@brief	set Kind of Goods
@@ -135,30 +144,42 @@ public:
 		@brief	set ContainerId of Goods
 		@pre	none
 		@post	ContainerId of Goods is set
-		@param	inId	Id of Goods
+		@param	inContainerId	Id of Goods
 	*/
 	void SetContainerId(int inContainerId) {
 		m_ContainerId = inContainerId;
 	}
 
 	/*
+		@brief	set StorageId of Goods
+		@pre	none
+		@post	StorageId of Goods is set
+		@param	inStorageId	Id of Goods
+	*/
+	void SetStorageId(int inStorageId) {
+		m_StorageId = inStorageId;
+	}
+
+	/*
 		@brief	set Goods record
 		@pre	none
 		@post	Goods record is set
-		@param	inKind		Kind of Goods
+		@param	inKind			Kind of Goods
 		@param	inPurchaseDay	PurchaseDay of Goods
-		@param	inName	Name of Goods
-		@param	inPrice		Price of Goods
-		@param	inId	Id of Goods
+		@param	inName			Name of Goods
+		@param	inPrice			Price of Goods
+		@param	inId			Id of Goods
 		@param	inContainerId	ContainerId of Goods
+		@param	inStorageId		StorageId of Goods
 	*/
-	void SetGoods(int inKind, int inPurchaseDay, string inName, int inPrice, int inId, int inContainerId) {
+	void SetGoods(int inKind, int inPurchaseDay, string inName, int inPrice, int inId, int inContainerId, int inStorageId) {
 		SetKind(inKind);
 		SetPurchaseDay(inPurchaseDay);
 		SetName(inName);
 		SetPrice(inPrice);
 		SetId(inId);
 		SetContainerId(inContainerId);
+		SetStorageId(inStorageId);
 	}
 
 	/*
@@ -204,6 +225,13 @@ public:
 	void SetContainerIdFromKB();
 
 	/*
+		@brief	set StorageId of Goods from keyboard
+		@pre	none
+		@post	StorageId of Goods is set
+	*/
+	void SetStorageIdFromKB();
+
+	/*
 		@brief	set Goods record from keyboard
 		@pre	none
 		@post	Goods record is set
@@ -211,46 +239,53 @@ public:
 	void SetGoodsFromKB();
 
 	/*
-		@brief	display Kind of Goods on screeen
+		@brief	display Kind of Goods on screen
 		@pre	none
 		@post	Kind of Goods is on screen
 	*/
 	void DisplayKindOnScreen();
 
 	/*
-		@brief	display PurchaseDay of Goods on screeen
+		@brief	display PurchaseDay of Goods on screen
 		@pre	none
 		@post	PurchaseDay of Goods is on screen
 	*/
 	void DisplayPurchaseDayOnScreen();
 
 	/*
-		@brief	display Name of Goods on screeen
+		@brief	display Name of Goods on screen
 		@pre	none
 		@post	Name of Goods is on screen
 	*/
 	void DisplayNameOnScreen();
 
 	/*
-		@brief	display Price of Goods on screeen
+		@brief	display Price of Goods on screen
 		@pre	none
 		@post	Price of Goods is on screen
 	*/
 	void DisplayPriceOnScreen();
 
 	/*
-		@brief	display Id of Goods on screeen
+		@brief	display Id of Goods on screen
 		@pre	none
 		@post	Id of Goods is on screen
 	*/
 	void DisplayIdOnScreen();
 
 	/*
-		@brief	display ContainerId of Goods on screeen
+		@brief	display ContainerId of Goods on screen
 		@pre	none
 		@post	ContainerId of Goods is on screen
 	*/
 	void DisplayContainerIdOnScreen();
+
+	/*
+		@brief	display StorageId of Goods on screen
+		@pre	none
+		@post	StorageId of Goods is on screen
+	*/
+	void DisplayStorageIdOnScreen();
 
 	/*
 		@brief	display Goods record on screeen
@@ -281,13 +316,15 @@ public:
 		m_Price = data.GetPrice();
 		m_Id = data.GetId();
 		m_ContainerId = data.GetContainerId();
+		m_StorageId = data.GetStorageId();
 	}
 
 private:
-	int m_Kind;		// Kind of Goods
+	int m_Kind;			// Kind of Goods
 	int m_PurchaseDay;	// PurchaseDay of Goods
 	string m_Name;		// Name of Goods
 	int m_Price;		// Price of Goods
 	int m_Id;			// Id of Goods
 	int m_ContainerId;	// ContainerId of Goods
+	int m_StorageId;	// StorageId of Goods
 };

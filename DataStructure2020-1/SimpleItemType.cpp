@@ -1,4 +1,18 @@
+#include "pch.h"
 #include "SimpleItemType.h"
+
+// Constructor
+SimpleItemType::SimpleItemType()
+{
+	m_Id = 0;
+	m_Name = "";
+	m_Kind = 0;
+}
+
+// Destructor
+SimpleItemType::~SimpleItemType()
+{
+}
 
 // m_Id을 가져온다
 int SimpleItemType::GetId() const
@@ -41,6 +55,31 @@ void SimpleItemType::SetSimpleItem(int InId, string InName, int InKind)
 	SetId(InId);
 	SetName(InName);
 	SetKind(InKind);
+}
+
+void SimpleItemType::SetIdFromKB()
+{
+	cout << "\t물품의 Id를 입력하시오 : ";
+	cin >> m_Id;
+}
+
+void SimpleItemType::SetNameFromKB()
+{
+	cout << "\t물품의 이름을 입력하시오 : ";
+	cin >> m_Id;
+}
+
+void SimpleItemType::SetKindFromKB()
+{
+	cout << "\t물품의 종류을 입력하시오(책=1, 학용품=2, 화장품=3, 전자제품=4, 기타=0) : ";
+	cin >> m_Id;
+}
+
+void SimpleItemType::SetSimpleItemFromKB()
+{
+	SetKindFromKB();
+	SetNameFromKB();
+	SetIdFromKB();
 }
 
 // m_Name을 display한다.

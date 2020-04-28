@@ -1,4 +1,6 @@
-#include "pch.h"
+#pragma once
+
+class ContainerType;
 
 class StorageType
 {
@@ -7,6 +9,8 @@ public:
 		constructor
 	*/
 	StorageType();
+
+	StorageType(int max);
 	/*
 		Destructor
 	*/
@@ -37,12 +41,33 @@ public:
 	int GetMaxNum() const;
 
 	/*
+		@brief	Id를 입력한다
+		@pre	none
+		@post	none
+	*/
+	void SetId(int InId);
+
+	/*
+		@brief	MaxNum을 설정한다
+		@pre	none
+		@post	none
+	*/
+	void SetMaxNum(int InMaxNum);
+
+	/*
 		@brief	컨테이너리스트가 꽉 찼는지 확인
 		@pre	list가 초기화돼야한다
 		@post	none
 		@return	list가 full 이면 return true, 아니면 return false
 	*/
 	bool IsFull() const;
+
+	/*
+		@brief	컨테이너리스트를 비운다
+		@pre	none
+		@post	컨테이너리스트가 비워진다
+	*/
+	void MakeEmpty();
 
 	/*
 		@brief	원하는 container를 찾아서 parameter에 참조한다
@@ -97,12 +122,34 @@ public:
 	void DisplayAllContainer();
 
 	/*
-		@brief	container목록과 아이템을 모두 출력한다
+		@brief	matserlist에 접근해 container에 대한 모든 정보를 출력한다
 		@pre	containerlist가 초기화돼야한다, MasterList가 초기화돼야한다
 		@post	모든 containerlist의 정보가 출력된다.
 		@param	ItemList	MasterList를 참조한다	
 	*/
 	void DisplayAllDetailsContainer(SortedList<ItemType>& ItemList);
+
+	bool operator==(StorageType& storage) {
+		if (GetId() == storage.GetId()) return true;
+		return false;
+	}
+
+	bool operator>(StorageType& storage) {
+		if (GetId() > storage.GetId()) return true;
+		return false;
+	}
+
+	bool operator<(StorageType& storage) {
+		if (GetId() < storage.GetId()) return true;
+		return false;
+	}
+
+	void operator=(StorageType& storage) {
+		m_sId = storage.GetId();
+		CurrentNum = storage.GetCurrentNum();
+		MaxNum = storage.GetMaxNum();
+		ContainerList = storage.ContainerList;
+	}
 private:
 	int m_sId;
 	int CurrentNum;

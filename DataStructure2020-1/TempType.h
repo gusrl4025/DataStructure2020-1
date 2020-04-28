@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 
 class TempType
 {
@@ -13,6 +12,14 @@ public:
 		Destructor
 	*/
 	~TempType();
+
+	/*
+		@brief	TempList가 가득 찼는지 확인
+		@pre	TempList가 초기화돼야한다
+		@post	none
+		@return	가득 찼으면 return 1, 아니면 return 0;
+	*/
+	bool IsFull() const;
 
 	/*
 		@brief	TempList의 item 개수를 return
@@ -39,6 +46,13 @@ public:
 		@return Dequeue가 되었으면 return true, 아니면 return false
 	*/
 	bool DeQueue(ItemType& item);
+
+	/*
+		@brief	TempItemList의 CurPointer를 초기화시킨다.
+		@pre	TempItemList가 initialize 돼야한다.
+		@post	CurPointer가 m_Front를 가리킨다.
+	*/
+	void ResetList();
 
 	/*
 		@brief	TempItemList를 비운다.
@@ -80,7 +94,31 @@ public:
 		@pre	TempItemList가 initialize 돼야한다.
 		@post	TempItemList의 모든 원소가 display된다.
 	*/
-	bool DisplayAllTempItems();
+	void DisplayAllTempItems();
+
+	/*
+		@brief	입력받은 Kind와 같은 아이템을 TempList에서 찾아 출력한다.
+		@pre	TempList가 초기화돼야한다.
+		@post	찾는 Kind인 item을 출력한다.
+		@return	item을 찾아서 출력하면 true, 아니면 false
+	*/
+	bool SearchByKind();
+
+	/*
+		@brief	입력받은 Name와 같은 아이템을 TempList에서 찾아 출력한다.
+		@pre	TempList가 초기화돼야한다.
+		@post	찾는 Name인 item을 출력한다.
+		@return	item을 찾아서 출력하면 true, 아니면 false
+	*/
+	bool SearchByName();
+
+	/*
+		@brief	입력받은 PurchaseDay와 같은 아이템을 TempList에서 찾아 출력한다.
+		@pre	TempList가 초기화돼야한다.
+		@post	찾는 PurchaseDay인 item을 출력한다.
+		@return	item을 찾아서 출력하면 true, 아니면 false
+	*/
+	bool SearchByPurchaseDay();
 private:
 	int NumOfItems;
 	Queue<ItemType> m_TempItemList;

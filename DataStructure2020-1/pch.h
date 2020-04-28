@@ -11,6 +11,7 @@ using namespace std;
 #define MAXSIZE 5
 #define MAXQUEUE 31
 #define MAXCONTAINER 10
+#define MAXSTORAGE 5
 
 #include "UnsortedList.h"
 #include "SortedList.h"

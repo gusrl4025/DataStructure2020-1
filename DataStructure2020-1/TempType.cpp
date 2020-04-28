@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TempType.h"
 
 // constructor
@@ -9,6 +10,12 @@ TempType::TempType()
 // destructor
 TempType::~TempType()
 {
+}
+
+bool TempType::IsFull() const
+{
+	if (NumOfItems == MAXQUEUE) return true;
+	return false;
 }
 
 // TempList의 item 개수를 return	
@@ -68,7 +75,7 @@ bool TempType::Replace(const ItemType& item)
 }
 
 // TempItemList에 있는 모든 원소를 Display한다.	
-bool TempType::DisplayAllTempItems()
+void TempType::DisplayAllTempItems()
 {
 	ItemType item;
 	m_TempItemList.ResetList();
@@ -76,5 +83,65 @@ bool TempType::DisplayAllTempItems()
 		m_TempItemList.GetNextItem(item);
 		item.DisplayGoodsOnScreen();
 	}
+}
+
+bool TempType::SearchByKind()
+{
+	ItemType item;
+	ItemType temp;
+	bool found;
+	item.SetKindFromKB();
+	m_TempItemList.ResetList();
+	while (m_TempItemList.GetNextItem(temp) == true) {
+		if (temp.GetKind() == item.GetKind()) {
+			temp.DisplayGoodsOnScreen();
+			found = true;
+		}
+	}
+	if (!found) {
+		cout << "\t찾는 종류의 item이 존재하지 않습니다.\n";
+		return false;
+	}
+	return true;
+}
+
+bool TempType::SearchByName()
+{
+	ItemType item;
+	ItemType temp;
+	bool found;
+	item.SetNameFromKB();
+	m_TempItemList.ResetList();
+	while (m_TempItemList.GetNextItem(temp) == true) {
+		if (temp.GetName() == item.GetName()) {
+			temp.DisplayGoodsOnScreen();
+			found = true;
+		}
+	}
+	if (!found) {
+		cout << "\t찾는 이름의 item이 존재하지 않습니다.\n";
+		return false;
+	}
+	return true;
+}
+
+bool TempType::SearchByPurchaseDay()
+{
+	ItemType item;
+	ItemType temp;
+	bool found;
+	item.SetPurchaseDayFromKB();
+	m_TempItemList.ResetList();
+	while (m_TempItemList.GetNextItem(temp) == true) {
+		if (temp.GetPurchaseDay() == item.GetPurchaseDay()) {
+			temp.DisplayGoodsOnScreen();
+			found = true;
+		}
+	}
+	if (!found) {
+		cout << "\t찾는 구매일의 item이 존재하지 않습니다.\n";
+		return false;
+	}
+	return true;
 }
 

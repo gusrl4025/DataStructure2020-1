@@ -1,4 +1,24 @@
+#include "pch.h"
 #include "StorageType.h"
+
+StorageType::StorageType()
+{
+	m_sId = 0;
+	CurrentNum = 0;
+	MaxNum = MAXSTORAGE;
+}
+
+StorageType::StorageType(int max)
+{
+	m_sId = 0;
+	CurrentNum = 0;
+	MaxNum = max;
+}
+
+StorageType::~StorageType()
+{
+
+}
 
 // Id를 반환한다
 int StorageType::GetId() const
@@ -18,11 +38,26 @@ int StorageType::GetMaxNum() const
 	return MaxNum;
 }
 
+void StorageType::SetId(int InId)
+{
+	m_sId = InId;
+}
+
+void StorageType::SetMaxNum(int InMaxNum)
+{
+	MaxNum = InMaxNum;
+}
+
 // 컨테이너리스트가 꽉 찼는지 확인
 bool StorageType::IsFull() const
 {
 	if (CurrentNum == MaxNum) return true;
 	return false;
+}
+// 컨테이너리스트를 비운다
+void StorageType::MakeEmpty()
+{
+	ContainerList.MakeEmpty();
 }
 
 // 원하는 container를 찾아서 parameter에 참조한다
@@ -71,16 +106,24 @@ void StorageType::DisplayAllContainer()
 {
 	ContainerType container;
 	ContainerList.ResetList();
+	cout << "\t----------------------Container 목록-----------------------\n";
 	for (int i = 0; i < CurrentNum; i++) {
 		ContainerList.GetNextItem(container);
 		container.DisplayContainerOnScreen();
+		container.DisplayAllPhoto();
+		container.DisplayAllItem();
 	}
 }
 
-
-
-// container아이템을 모두 출력한다
+// matserlist에 접근해 container에 대한 모든 정보를 출력한다
 void StorageType::DisplayAllDetailsContainer(SortedList<ItemType>& ItemList)
 {
-	
+	ContainerType container;
+	ContainerList.ResetList();
+	for (int i = 0; i < CurrentNum; i++) {
+		ContainerList.GetNextItem(container);
+		container.DisplayContainerOnScreen();
+		container.DisplayAllPhoto();
+		container.DisplayAllDetailsItem(ItemList);
+	}
 }

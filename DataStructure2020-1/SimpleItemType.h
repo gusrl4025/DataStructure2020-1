@@ -1,4 +1,4 @@
-#include "pch.h"
+#pragma once
 
 class SimpleItemType
 {
@@ -54,7 +54,7 @@ public:
 	void SetName(string InName);
 
 	/*
-		@brief	m_Kind를 set한다.
+		@brief	m_Kind을 set한다.
 		@pre	none
 		@post	m_Kind = InKind
 		@param	InKind	Kind to set
@@ -70,6 +70,27 @@ public:
 		@param	InKind	Kind to set
 	*/
 	void SetSimpleItem(int InId, string InName, int InKind);
+
+	/*
+		@brief	m_Id를 키보드로부터 받아 set한다.
+		@pre	none
+		@post	m_Id가 키보드로부터 받아온 값으로 set된다.
+	*/
+	void SetIdFromKB();
+
+	/*
+		@brief	m_Name을 키보드로부터 받아 set한다.
+		@pre	none
+		@post	m_Name이 키보드로부터 받아온 값으로 set된다.
+	*/
+	void SetNameFromKB();
+
+	/*
+		@brief	m_Kind를 키보드로부터 받아 set한다.
+		@pre	none
+		@post	m_Kind가 키보드로부터 받아온 값으로 set된다.
+	*/
+	void SetKindFromKB();
 
 	/*
 		@brief	set SimpleItem from keyboard

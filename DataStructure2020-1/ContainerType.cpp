@@ -1,24 +1,18 @@
+#include "pch.h"
 #include "ContainerType.h"
 
 // Constructor
 ContainerType::ContainerType()
 {
-	m_ContainerId = 0;
+	m_Id = 0;
 	m_Location = "";
 }
 
 // Constructor
 ContainerType::ContainerType(int InContainerId)
 {
-	m_ContainerId = InContainerId;
+	m_Id = InContainerId;
 	m_Location = "";
-}
-
-// Constructor
-ContainerType::ContainerType(int InContainerId, string InLocation)
-{
-	m_ContainerId = InContainerId;
-	m_Location = InLocation;
 }
 
 // Destructor
@@ -53,7 +47,7 @@ void ContainerType::SetLocation(string InLocation)
 void ContainerType::SetIdFromKB()
 {
 	int InId;
-	cout << "\tId를 입력하시오 : ";
+	cout << "\tContainer의 Id를 입력하시오 : ";
 	cin >> InId;
 	m_Id = InId;
 }
@@ -61,7 +55,7 @@ void ContainerType::SetIdFromKB()
 void ContainerType::SetLocationFromKB()
 {
 	string InLocation;
-	cout << "\tLocation을 입력하시오 : ";
+	cout << "\tContainer의 Location을 입력하시오 : ";
 	cin >> InLocation;
 	m_Location = InLocation;
 }
@@ -81,7 +75,7 @@ void ContainerType::DisplayIdOnScreen()
 
 void ContainerType::DisplayLocationOnScreen()
 {
-	cout << "Location : " << m_Location << "\n";
+	cout << "\tLocation : " << m_Location << "\n";
 }
 
 void ContainerType::DisplayContainerOnScreen()
@@ -89,6 +83,11 @@ void ContainerType::DisplayContainerOnScreen()
 	DisplayIdOnScreen();
 	DisplayLocationOnScreen();
 	cout << "\n";
+}
+
+void ContainerType::MakeEmpty()
+{
+	m_SimpleItemList.MakeEmpty();
 }
 
 // item을 SimpleItem로 바꾸고 m_SimpleItemList에 item을 추가한다.
@@ -139,19 +138,16 @@ bool ContainerType::UpdatePhoto(const string& photo)
 	return false;
 }
 
-// Container의 정보를 출력한다
-void ContainerType::DisplayContainerInfo()
-{
-}
-
 // m_SimpleItemList에 있는 모든 item을 display한다.
 void ContainerType::DisplayAllItem()
 {
-	SimpleItemType item;
+	SimpleItemType simpleitem;
 	m_SimpleItemList.ResetList();
 	int length = m_SimpleItemList.GetLength();
+	cout << "\tItem : \n";
 	for (int CurPos = 0; CurPos < length; CurPos++) {
-		m_SimpleItemList.GetNextItem(item);
+		m_SimpleItemList.GetNextItem(simpleitem); 
+		simpleitem.DisplaySimpleItemOnScreen();
 	}
 }
 
@@ -161,9 +157,40 @@ void ContainerType::DisplayAllPhoto()
 	string photo;
 	m_PhotoList.ResetList();
 	int length = m_PhotoList.GetLength();
+	cout << "\tPhoto :\n";
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_PhotoList.GetNextItem(photo);
+		cout << "\t" << photo << "\n";
 	}
+}
+
+// Container의 item을 masterlist에서 참조해서 display한다
+void ContainerType::DisplayAllDetailsItem(SortedList<ItemType>& masterlist)
+{
+	SimpleItemType simpleitem;
+	m_SimpleItemList.ResetList();
+	while (m_SimpleItemList.GetNextItem(simpleitem)) {
+		ItemType item;
+		item.SetId(simpleitem.GetId());
+		masterlist.Retrieve_Binary(item);
+		item.DisplayGoodsOnScreen();
+	}
+
+}
+
+// SimpleItem의 Id을 입력받아 m_SimpleItemList에서 같은 Name을 가진 item을 참조한다.
+bool ContainerType::GetItem(SimpleItemType& item)
+{
+	SimpleItemType temp;
+	int length = m_SimpleItemList.GetLength();
+	for (int CurPos = 0; CurPos < length; CurPos++) {
+		m_SimpleItemList.GetNextItem(temp);
+		if (temp == item) {
+			item = temp;
+			return true;
+		}
+	}
+	return false;
 }
 
 // SimpleItem의 Name을 입력받아 m_SimpleItemList에서 같은 Name을 가진 item을 참조한다.
@@ -171,12 +198,14 @@ bool ContainerType::FindByName(SimpleItemType& item)
 {
 	m_SimpleItemList.ResetList();
 	string InName;
+	bool found;
 	cout << "\t찾으려는 item의 이름을 입력하시오 : ";
 	cin >> InName;
 	int length = m_SimpleItemList.GetLength();
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_SimpleItemList.GetNextItem(item);
 		if (item.GetName() == InName) {
+			item.DisplaySimpleItemOnScreen();
 			return true;
 		}
 	}
@@ -187,13 +216,14 @@ bool ContainerType::FindByName(SimpleItemType& item)
 bool ContainerType::FindByKind(SimpleItemType& item)
 {
 	m_SimpleItemList.ResetList();
-	string InKind;
+	int InKind;
 	cout << "\t찾으려는 item의 종류를 입력하시오 : ";
 	cin >> InKind;
 	int length = m_SimpleItemList.GetLength();
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_SimpleItemList.GetNextItem(item);
 		if (item.GetKind() == InKind) {
+			item.DisplaySimpleItemOnScreen();
 			return true;
 		}
 	}

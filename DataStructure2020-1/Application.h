@@ -1,4 +1,4 @@
-#include "pch.h"
+#pragma once
 
 class Application
 {
@@ -23,7 +23,8 @@ public:
 	*/
 	void Run();
 	void RunMaster();
-	void RunContainer();
+	int RunStorage();
+	void RunContainer(int InStorageId);
 	void RunTemp();
 
 	/*
@@ -34,7 +35,8 @@ public:
 	*/
 	int GetCommand();
 	int GetCommandMaster();
-	int GetCommandContainer();
+	int GetCommandStorage();
+	int GetCommandContainer(int InStorageId);
 	int GetCommandTemp();
 
 	/*
@@ -44,33 +46,34 @@ public:
 		@return if function works return true, otherwise return false
 	*/
 	bool AddItem();
+	bool AddItem(ItemType item);
 
 	/*
-		@brief	receive keynumber from keyboard and find item in Masterlist which same keynumber and delete that item
-		@pre	MasterList should be initialized
-		@post	the record is deleted in MasterList
+		@brief	Id를 입력받아 MasterList와 Container에서 지워줌
+		@pre	MasterList, Container가 초기화 돼야한다
+		@post	the record is deleted in MasterList, Container
 		@return if function works return true, otherwise return false
 	*/
 	bool DeleteItemMasterList();
 
 	/*
-		@brief	receive Goods record from keyboard and find item has same keynumber and replace the record with new record
-		@pre	MasterList should be initialized
-		@post	the record is replace with new record
+		@brief	Item을 입력받아 MasterList와 Container에서 수정함
+		@pre	MasterList, Container가 초기화 돼야한다
+		@post	the record is replaced in MasterList, Container
 		@return if function works return true, otherwise return false
 	*/
 	bool ReplaceItemMasterList();
 
 	/*
-		@brief	receive ID from keyboard and find item which has same ID and display that record on screen
-		@pre	Masterlist should be initialized
+		@brief	Id을 입력받아 MasterList에서 검색함
+		@pre	MasterList가 초기화 돼야한다
 		@post	record user wanted to find displayed on screen
 		@return if function works return true, otherwise return false
 	*/
 	bool RetrieveItemMasterList();
 
 	/*
-		@brief	receive word from keyboard and display the kind of item Kind display that record on screen
+		@brief	item 종류를 입력받아 MasterList에서 검색함
 		@pre	Masterlist should be initialized
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
@@ -78,7 +81,7 @@ public:
 	bool SearchByKindMasterList();
 
 	/*
-		@brief	receive Name from keyboard and find item which Name include the Name and display that record on screen
+		@brief	item 이름을 입력받아 MasterList에서 검색함
 		@pre	Masterlist should be initialized
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
@@ -86,7 +89,7 @@ public:
 	bool SearchByNameMasterList();
 
 	/*
-		@brief	receive PurchaseDay from keyboard and find item which Name include the PurchaseDay and display that record on screen
+		@brief	item 구매일 입력받아 MasterList에서 검색함
 		@pre	Masterlist should be initialized
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
@@ -94,9 +97,9 @@ public:
 	bool SearchByPurchaseDayMasterList();
 
 	/*
-		@brief	make MasterList empty
+		@brief	make MasterList, StorageList empty
 		@pre	none
-		@post	make MasterList empty
+		@post	make MasterList, StorageList empty
 	*/
 	void MakeEmptyMasterList();
 
@@ -115,6 +118,14 @@ public:
 	*/
 	bool MoveItemMasterToTemp();
 
+	//----------------------- RunStorage -----------------------------------------------------
+
+
+	int GetStorageId();
+
+	void DisplayAllContainer();
+
+	void DisPlayAllDetailsContainer();
 	//----------------------- RunContainer ---------------------------------------------------
 
 	/*
@@ -123,7 +134,7 @@ public:
 		@post	the record is deleted in MasterList
 		@return if function works return true, otherwise return false
 	*/
-	void PrintContainerList();
+	void PrintContainerList(StorageType& storage);
 
 	/*
 		@brief
@@ -131,7 +142,7 @@ public:
 		@post
 		@return
 	*/
-	bool AddPhoto();
+	bool AddPhoto(StorageType& storage);
 
 	/*
 		@brief	receive Goods record from keyboard and find item has same keynumber and replace the record with new record
@@ -139,18 +150,31 @@ public:
 		@post	the record is replace with new record
 		@return if function works return true, otherwise return false
 	*/
-	bool DeletePhoto();
+	bool DeletePhoto(StorageType& storage);
 
-	bool UpdatePhoto();
+	/*
+		@brief	
+		@pre	
+		@post	
+		@return	
+	*/
+	bool UpdatePhoto(StorageType& storage);
 
-	bool PrintPhotoList();
+	/*
+		@brief
+		@pre
+		@post
+		@return
+	*/
+	bool PrintPhotoList(StorageType& storage);
+
 	/*
 		@brief	receive ID from keyboard and find item which has same ID and display that record on screen
 		@pre	Masterlist should be initialized
 		@post	record user wanted to find displayed on screen
 		@return if function works return true, otherwise return false
 	*/
-	bool RetrieveItemContainerList();
+	bool RetrieveItemContainerList(StorageType& storage);
 
 	/*
 		@brief	receive word from keyboard and display the kind of item Kind display that record on screen
@@ -158,7 +182,7 @@ public:
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
 	*/
-	bool SearchByKindContainerList();
+	bool SearchByKindContainerList(StorageType& storage);
 
 	/*
 		@brief	receive Name from keyboard and find item which Name include the Name and display that record on screen
@@ -166,21 +190,21 @@ public:
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
 	*/
-	bool SearchByNameContainerList();
+	bool SearchByNameContainerList(StorageType& storage);
 
 	/*
 		@brief	make MasterList empty
 		@pre	none
 		@post	make MasterList empty
 	*/
-	void MakeEmptyContainer();
+	void MakeEmptyContainer(StorageType& storage);
 
 	/*
 		@brief	display all records in list on screen
 		@pre	list should be initialized
 		@post	display all records in list on screen
 	*/
-	void DisplayAllItemContainerList();
+	void DisplayAllItemContainer(StorageType& storage);
 
 	//---------------TempList--------------------------------
 
@@ -252,12 +276,11 @@ public:
 		@post	item in TempList moved to MasterList
 		@return if function works return true, otherwise return false
 	*/
-	bool MoveItemTempToMaster();
+	void MoveItemTempToMaster();
 private:
 	SortedList<ItemType> m_MasterList;
 	TempType m_TempList;
-	StorageType m_ContainerList;
-	SortedList<ContainerType> m_ContainerList;
+	SortedList<StorageType> m_StorageList;
 	int m_Command;
 };
 

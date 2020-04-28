@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ItemType.h"
 
 // set Kind of Goods from keyboard
@@ -20,7 +21,7 @@ void ItemType::SetNameFromKB() {
 
 // set Price of Goods from keyboard
 void ItemType::SetPriceFromKB() {
-	cout << "\t물품의 수를 입력하시오 : ";
+	cout << "\t물품의 가격을 입력하시오 : ";
 	cin >> m_Price;
 }
 
@@ -30,10 +31,16 @@ void ItemType::SetIdFromKB() {
 	cin >> m_Id;
 }
 
-// set Id of Goods from keyboard
+// set ContainerId of Goods from keyboard
 void ItemType::SetContainerIdFromKB() {
 	cout << "\t물품을 저장할 박스의 번호를 입력하시오(어디에 저장할지 모를 때 -1로 입력하시오) : ";
 	cin >> m_ContainerId;
+}
+
+// set StorageId of Goods from keyboard
+void ItemType::SetStorageIdFromKB() {
+	cout << "\t물품을 저장할 저장소의 번호를 입력하시오(어디에 저장할지 모를 때 -1로 입력하시오) : ";
+	cin >> m_StorageId;
 }
 
 // set Goods record from keyboard
@@ -44,36 +51,43 @@ void ItemType::SetGoodsFromKB() {
 	SetPriceFromKB();
 	SetIdFromKB();
 	SetContainerIdFromKB();
+	SetStorageIdFromKB();
 }
 
-// display Kind of Goods on screeen
+// display Kind of Goods on screen
 void ItemType::DisplayKindOnScreen() {
 	cout << "\tKind : " << m_Kind << "\n";
 }
 
-// display PurchaseDay of Goods on
+// display PurchaseDay of Goods on screen
 void ItemType::DisplayPurchaseDayOnScreen() {
 	cout << "\tPurchaseDay : " << m_PurchaseDay << "\n";
 }
 
-// display Name of Goods on screeen
+// display Name of Goods on screen
 void ItemType::DisplayNameOnScreen() {
 	cout << "\tName : " << m_Name << "\n";
 }
 
-// display Price of Goods on screeen
+// display Price of Goods on screen
 void ItemType::DisplayPriceOnScreen() {
 	cout << "\tPrice : " << m_Price << "\n";
 }
 
-// display Id of Goods on screeen
+// display Id of Goods on screen
 void ItemType::DisplayIdOnScreen() {
 	cout << "\tId : " << m_Id << "\n";
 }
 
-// display Id of Goods on screeen
+// display ContainerId of Goods on screen
 void ItemType::DisplayContainerIdOnScreen() {
 	cout << "\tContainerId : " << m_ContainerId << "\n";
+}
+
+// display StorageId of Goods on screen
+void ItemType::DisplayStorageIdOnScreen()
+{
+	cout << "\tStorageId : " << m_StorageId << "\n";
 }
 
 // display Goods record on screeen
@@ -84,5 +98,6 @@ void ItemType::DisplayGoodsOnScreen() {
 	DisplayPriceOnScreen();
 	DisplayIdOnScreen();
 	DisplayContainerIdOnScreen();
+	DisplayStorageIdOnScreen();
 	cout << "\n\n";
 }
