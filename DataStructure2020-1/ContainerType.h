@@ -88,6 +88,22 @@ public:
 	void MakeEmpty();
 
 	/*
+		@brief	SimpleItemList의 포인터를 초기화시킨다
+		@pre	none
+		@post	포인터가 초기화된다
+	*/
+	void ResetSimpleList();
+
+	/*
+		@brief	포인터의 다음위치의 item을 참조한다
+		@pre	SimpleItemList가 초기화돼야한다
+		@post	다음 item을 참조한다
+		@param	simpleitem	여기에 다음 item을 참조한다.
+		@return	return true if function works, otherwise return false
+	*/	
+	bool GetNextSimpleItem(SimpleItemType& simpleitem);
+
+	/*
 		@brief	item을 SimpleItem로 바꾸고 m_SimpleItemList에 item을 추가한다.
 		@pre	m_SimpleItemList가 initialize돼야한다
 		@post	m_SimpleItemList에 item이 추가됐다.
@@ -154,7 +170,7 @@ public:
 		@post	m_PhotoList에 있는 모든 photo가 display된다.
 	*/
 	void DisplayAllPhoto();
-
+	
 	/*
 		@brief	Container의 item을 masterlist에서 참조해서 display한다
 		@pre	masterlist가 초기화돼야한다
@@ -163,7 +179,7 @@ public:
 	void DisplayAllDetailsItem(SortedList<ItemType>& masterlist);
 
 	/*
-		@brief	SimpleItem의 Id을 입력받아 m_SimpleItemList에서 같은 Name을 가진 item을 참조한다.
+		@brief	SimpleItem의 Id을 입력받아 m_SimpleItemList에서 같은 Id을 가진 item을 참조한다.
 		@pre	m_SimpleItemList가 initialize돼야한다
 		@post	찾으려는 Id을 가진 item이 참조된다.
 		@param	item	param에 찾으려는 item을 참조한다.

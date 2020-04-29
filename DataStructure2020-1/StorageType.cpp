@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "StorageType.h"
 
+// constructor
 StorageType::StorageType()
 {
 	m_sId = 0;
@@ -8,6 +9,7 @@ StorageType::StorageType()
 	MaxNum = MAXSTORAGE;
 }
 
+// constructor
 StorageType::StorageType(int max)
 {
 	m_sId = 0;
@@ -15,6 +17,7 @@ StorageType::StorageType(int max)
 	MaxNum = max;
 }
 
+// destuctor
 StorageType::~StorageType()
 {
 
@@ -38,11 +41,13 @@ int StorageType::GetMaxNum() const
 	return MaxNum;
 }
 
+// Id를 설정한다
 void StorageType::SetId(int InId)
 {
 	m_sId = InId;
 }
 
+// MaxNum을 설정한다
 void StorageType::SetMaxNum(int InMaxNum)
 {
 	MaxNum = InMaxNum;
@@ -106,7 +111,6 @@ void StorageType::DisplayAllContainer()
 {
 	ContainerType container;
 	ContainerList.ResetList();
-	cout << "\t----------------------Container 목록-----------------------\n";
 	for (int i = 0; i < CurrentNum; i++) {
 		ContainerList.GetNextItem(container);
 		container.DisplayContainerOnScreen();

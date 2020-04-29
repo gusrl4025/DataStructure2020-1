@@ -93,9 +93,9 @@ public:
 		@pre	list should be initilized
 		@post	iterator is reset
 		@param	data	get current item of list
-		@return	return -1 if current item is last item in list otherwise return index of current item
+		@return	return false if current item is last item in list otherwise return true
 	*/
-	int GetNextItem(ItemType& data);
+	bool GetNextItem(ItemType& data);
 
 private:
 	ItemType* m_Array;
@@ -118,27 +118,27 @@ UnSortedList<ItemType>::~UnSortedList() {
 }
 
 template<typename ItemType>
-void UnSortedList<ItemType>::MakeEmpty() {
-	delete[] m_Array;
+inline void UnSortedList<ItemType>::MakeEmpty()
+{
 	m_Length = 0;
-	ResetList();
-	m_Array = new ItemType[m_MaxSize];
 }
 
 template<typename ItemType>
-int UnSortedList<ItemType>::GetLength() const {
+inline int UnSortedList<ItemType>::GetLength() const
+{
 	return m_Length;
 }
 
 template<typename ItemType>
-bool UnSortedList<ItemType>::IsEmpty() const {
+inline bool UnSortedList<ItemType>::IsEmpty() const
+{
 	if (m_Length == 0) return true;
 	return false;
 }
 
-
 template<typename ItemType>
-bool UnSortedList<ItemType>::IsFull() const {
+inline bool UnSortedList<ItemType>::IsFull() const
+{
 	if (m_Length == m_MaxSize) return true;
 	return false;
 }
@@ -161,10 +161,10 @@ bool UnSortedList<ItemType>::Add(ItemType item) {
 		for (int i = 0; i < m_Length; ++i) {
 			m_Array[i] = TempList[i];
 		}
-		delete[] TempList;
-		return true;
+		//delete[] TempList;
 	}
-	m_Array[m_Length++] = item;
+	m_Array[m_Length] = item;
+	m_Length++;
 	return true;
 }
 
@@ -207,9 +207,9 @@ bool UnSortedList<ItemType>::Replace(ItemType item)
 
 
 template<typename ItemType>
-int UnSortedList<ItemType>::GetNextItem(ItemType& item) {
+bool UnSortedList<ItemType>::GetNextItem(ItemType& item) {
 	m_CurPointer++;
-	if (m_CurPointer == m_Length) return -1;
+	if (m_CurPointer == m_Length) return false;
 	item = m_Array[m_CurPointer];
-	return m_CurPointer;
+	return true;
 }

@@ -114,6 +114,7 @@ private:
 	ItemType* m_Queue;
 };
 
+// constructor
 template<typename ItemType>
 inline Queue<ItemType>::Queue()
 {
@@ -124,6 +125,7 @@ inline Queue<ItemType>::Queue()
 	m_CurPointer = -1;
 }
 
+// destructor
 template<typename ItemType>
 inline Queue<ItemType>::~Queue()
 {

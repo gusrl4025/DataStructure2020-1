@@ -9,7 +9,6 @@ public:
 		constructor
 	*/
 	StorageType();
-
 	StorageType(int max);
 	/*
 		Destructor
@@ -41,7 +40,7 @@ public:
 	int GetMaxNum() const;
 
 	/*
-		@brief	Id를 입력한다
+		@brief	Id를 설정한다
 		@pre	none
 		@post	none
 	*/
@@ -129,22 +128,22 @@ public:
 	*/
 	void DisplayAllDetailsContainer(SortedList<ItemType>& ItemList);
 
-	bool operator==(StorageType& storage) {
+	bool operator==(const StorageType& storage) {
 		if (GetId() == storage.GetId()) return true;
 		return false;
 	}
 
-	bool operator>(StorageType& storage) {
+	bool operator>(const StorageType& storage) {
 		if (GetId() > storage.GetId()) return true;
 		return false;
 	}
 
-	bool operator<(StorageType& storage) {
+	bool operator<(const StorageType& storage) {
 		if (GetId() < storage.GetId()) return true;
 		return false;
 	}
 
-	void operator=(StorageType& storage) {
+	void operator=(const StorageType& storage) {
 		m_sId = storage.GetId();
 		CurrentNum = storage.GetCurrentNum();
 		MaxNum = storage.GetMaxNum();

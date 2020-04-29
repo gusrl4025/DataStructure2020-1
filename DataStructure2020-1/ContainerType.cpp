@@ -38,6 +38,7 @@ void ContainerType::SetId(int InId)
 	m_Id = InId;
 }
 
+// Location을 설정한다
 void ContainerType::SetLocation(string InLocation)
 {
 	m_Location = InLocation;
@@ -52,6 +53,7 @@ void ContainerType::SetIdFromKB()
 	m_Id = InId;
 }
 
+// Location을 키보드로부터 받아 설정한다
 void ContainerType::SetLocationFromKB()
 {
 	string InLocation;
@@ -73,11 +75,13 @@ void ContainerType::DisplayIdOnScreen()
 	cout << "\tID : " << m_Id << "\n";
 }
 
+// Location을 출력한다.
 void ContainerType::DisplayLocationOnScreen()
 {
 	cout << "\tLocation : " << m_Location << "\n";
 }
 
+// Container의 정보를 출력한다
 void ContainerType::DisplayContainerOnScreen()
 {
 	DisplayIdOnScreen();
@@ -85,9 +89,22 @@ void ContainerType::DisplayContainerOnScreen()
 	cout << "\n";
 }
 
+// Container를 비운다.
 void ContainerType::MakeEmpty()
 {
 	m_SimpleItemList.MakeEmpty();
+}
+
+// SimpleItemList의 포인터를 초기화시킨다
+void ContainerType::ResetSimpleList()
+{
+	m_SimpleItemList.ResetList();
+}
+
+// 포인터의 다음위치의 item을 참조한다
+bool ContainerType::GetNextSimpleItem(SimpleItemType& simpleitem)
+{
+	return m_SimpleItemList.GetNextItem(simpleitem);
 }
 
 // item을 SimpleItem로 바꾸고 m_SimpleItemList에 item을 추가한다.
@@ -144,7 +161,6 @@ void ContainerType::DisplayAllItem()
 	SimpleItemType simpleitem;
 	m_SimpleItemList.ResetList();
 	int length = m_SimpleItemList.GetLength();
-	cout << "\tItem : \n";
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_SimpleItemList.GetNextItem(simpleitem); 
 		simpleitem.DisplaySimpleItemOnScreen();
@@ -157,7 +173,6 @@ void ContainerType::DisplayAllPhoto()
 	string photo;
 	m_PhotoList.ResetList();
 	int length = m_PhotoList.GetLength();
-	cout << "\tPhoto :\n";
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_PhotoList.GetNextItem(photo);
 		cout << "\t" << photo << "\n";
@@ -178,7 +193,7 @@ void ContainerType::DisplayAllDetailsItem(SortedList<ItemType>& masterlist)
 
 }
 
-// SimpleItem의 Id을 입력받아 m_SimpleItemList에서 같은 Name을 가진 item을 참조한다.
+// SimpleItem의 Id을 입력받아 m_SimpleItemList에서 같은 Id을 가진 item을 참조한다.
 bool ContainerType::GetItem(SimpleItemType& item)
 {
 	SimpleItemType temp;
@@ -198,9 +213,10 @@ bool ContainerType::FindByName(SimpleItemType& item)
 {
 	m_SimpleItemList.ResetList();
 	string InName;
-	bool found;
+	bool found = false;
 	cout << "\t찾으려는 item의 이름을 입력하시오 : ";
 	cin >> InName;
+	cout << "\n";
 	int length = m_SimpleItemList.GetLength();
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_SimpleItemList.GetNextItem(item);
@@ -219,6 +235,7 @@ bool ContainerType::FindByKind(SimpleItemType& item)
 	int InKind;
 	cout << "\t찾으려는 item의 종류를 입력하시오 : ";
 	cin >> InKind;
+	cout << "\n";
 	int length = m_SimpleItemList.GetLength();
 	for (int CurPos = 0; CurPos < length; CurPos++) {
 		m_SimpleItemList.GetNextItem(item);

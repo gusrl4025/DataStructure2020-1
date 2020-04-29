@@ -222,8 +222,9 @@ int Application::GetCommand()
 {
 	int command;
 	cout << endl << endl;
-	cout << "\t집안물품 정리 프로그램에 접속하신 것을 환영합니다!!\n";
-	cout << "\t-ID ----- Command ------------\n";
+	cout << "\t===================================================\n";
+	cout << "\t|집안물품 정리 프로그램에 접속하신 것을 환영합니다|\n";
+	cout << "\t=ID ================= Command =====================\n";
 	cout << "\t 1 : Add Item\n";
 	cout << "\t 2 : MasterList에 접근하기\n";
 	cout << "\t 3 : StorageList에 접근하기\n";
@@ -235,12 +236,13 @@ int Application::GetCommand()
 	return command;
 }
 
+// shows menu and receive the command from keyboard
 int Application::GetCommandMaster()
 {
 	int command;
 	cout << endl << endl;
 	cout << "\tMasterList에서 실행할 command를 입력하세요\n";
-	cout << "\t-ID ----- Command ------------\n";
+	cout << "\t=ID ================= Command =====================\n";
 	cout << "\t 1 : Item 추가하기\n";
 	cout << "\t 2 : Item 제거하기\n";
 	cout << "\t 3 : Item 업데이트\n";
@@ -248,6 +250,7 @@ int Application::GetCommandMaster()
 	cout << "\t 5 : 종류로 Item 검색하기\n";
 	cout << "\t 6 : 이름으로 Item 검색하기\n";
 	cout << "\t 7 : 구매일로 Item 검색하기\n";
+	//cout << "\t 8 : 일정기간 안에 구매한 Item 검색하기\n";
 	cout << "\t 8 : MasterList 비우기\n";
 	cout << "\t 9 : 모든 Item 출력하기\n";
 	cout << "\t 10 : TempList로 Item 옮기기 \n";
@@ -258,12 +261,13 @@ int Application::GetCommandMaster()
 	return command;
 }
 
+// shows menu and receive the command from keyboard
 int Application::GetCommandStorage()
 {
 	int command;
 	cout << "\n\n";
 	cout << "\tStorageList에서 실행할 command를 입력하세요\n";
-	cout << "\t-ID ----- Command ------------\n";
+	cout << "\t=ID ================= Command =====================\n";
 	cout << "\t 1 : 접근할 Storage 입력\n";
 	cout << "\t 2 : Storage 하나의 컨테이너들의 정보 출력\n";
 	cout << "\t 3 : Storage 하나의 컨테이너들의 상세 정보 출력\n";
@@ -274,13 +278,14 @@ int Application::GetCommandStorage()
 	return command;
 }
 
+// shows menu and receive the command from keyboard
 int Application::GetCommandContainer(int InStorageId)
 {
 	int command;
 	cout << endl << endl;
-	cout << "\tStorage ID : " << InStorageId << "\n";
+	cout << "\t=====================Storage ID : " << InStorageId << "=====================\n";
 	cout << "\tContainerList에서 실행할 command를 입력하세요\n";
-	cout << "\t-ID ----- Command ------------\n";
+	cout << "\t=ID ================= Command =====================\n";
 	cout << "\t 1 : Item 추가하기\n";
 	cout << "\t 2 : Container 목록 출력하기\n";
 	cout << "\t 3 : 사진 저장하기\n";
@@ -299,12 +304,13 @@ int Application::GetCommandContainer(int InStorageId)
 	return command;
 }
 
+// shows menu and receive the command from keyboard
 int Application::GetCommandTemp()
 {
 	int command;
 	cout << endl << endl;
 	cout << "\tTempList에서 실행할 command를 입력하세요\n";
-	cout << "\t-ID ----- Command ------------\n";
+	cout << "\t=ID ================= Command =====================\n";
 	cout << "\t 1 : Item 추가하기\n";
 	cout << "\t 2 : Item 제거하기 \n";
 	cout << "\t 3 : Item 업데이트하기\n";
@@ -328,8 +334,13 @@ bool Application::AddItem() {
 	ItemType item;
 	item.SetGoodsFromKB(); // item을 입력받는다
 	if (item.GetContainerId() == -1 || item.GetStorageId() == -1) {	// ContainerId == -1이면 TemptList에 저장
-		m_TempList.EnQueue(item);
-		return true;
+		if (m_TempList.EnQueue(item)) {
+			cout << "\n\t Item저장에 성공했습니다\n";
+			DisplayAllItemTempList();
+			return true;
+		}
+		cout << "\n\tItem저장에 실패했습니다\n";
+		return false;
 	}
 	else { // StorageId, ContainerList가 -1이 아니면
 		StorageType storage; // StorageId를 가진 storage를 하나 생성
@@ -337,56 +348,59 @@ bool Application::AddItem() {
 		if (m_MasterList.Add(item)) {
 			if (m_StorageList.Retrieve_Binary(storage)) { // StorageId와 같은 storage가 존재하면
 				ContainerType container;
-				container.SetIdFromKB();
-				if (storage.GetContainer(container)) {
+				container.SetId(item.GetContainerId());
+				if (storage.GetContainer(container)) { // containerId와 같은 container가 존재하면
 					if (container.AddItem(item)) {
+						storage.UpdateContainer(container);
+						m_StorageList.Replace(storage);
 						cout << "\n\t Item저장에 성공했습니다.\n";
-						cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
+						cout << "\n\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
 						container.DisplayAllItem();
+						return true;
 					}
 				}
-				else {
-					cout << "\t해당하는 container가 없어 새로 만듭니다\n";
-					container.SetLocationFromKB();
-					if (storage.AddContainer(container)) {
-						storage.GetContainer(container);
-						if (container.AddItem(item)) {
-							cout << "\n\t Item저장에 성공했습니다.\n";
-							cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
-							container.DisplayAllItem();
+				else { // storageId와 같은 storage는 있는데 그 안의 containerId와 같은 container가 없을 시
+					if (!storage.IsFull()) { // storage가 꽉 차지 않았을 때
+						cout << "\n\t=====================Storage:" << storage.GetId() << " Container:" << container.GetId() << " 생성=====================\n";
+						container.SetLocationFromKB();
+						container.AddItem(item);
+						if (storage.AddContainer(container)) {
+							if (m_StorageList.Replace(storage)) {
+								cout << "\n\t Item저장에 성공했습니다.\n";
+								cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
+								container.DisplayAllItem();
+								return true;
+							}
+							else {
+								cout << "\n\tItem저장에 실패했습니다\n";
+								return false;
+							}
 						}
+					}
+					else { // storage가 꽉 찼을 떄
+						cout << "\n\tStorage:" << storage.GetId() << " 에 더이상 Container를 생성할 수 없습니다\n";
+						m_MasterList.Delete(item);
+						return false;
 					}
 				}
 			}
-			else {
+			else { // StorageId와 같은 storage가 존재하지 않을 때(container도 당연히 없다)
 				int InMaxNum;
+				cout << "\n\t=====================Storage:" << storage.GetId() << " 생성=====================\n";
 				ContainerType container;
 				cout << "\t해당하는 storage가 없어 새로 만듭니다.\n";
 				cout << "\t최대 보관가능한 컨테이터의 개수를 입력하시오 : ";
 				cin >> InMaxNum;
 				storage.SetMaxNum(InMaxNum);
+				cout << "\n\t=====================Storage:" << storage.GetId() << " Container:" << item.GetContainerId() << " 생성=====================\n";
 				container.SetId(item.GetContainerId());
 				container.SetLocationFromKB();
-				storage.AddContainer(container);
 				container.AddItem(item);
-				if (container.AddItem(item)) {
-					m_StorageList.Add(storage);
-					cout << "\n\t Item저장에 성공했습니다.\n";
-					cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
-					container.DisplayAllItem();
-				}
-				else {
-					cout << "\t해당하는 container가 없어 새로 만듭니다\n";
-					container.SetLocationFromKB();
-					storage.AddContainer(container);
-					if (container.AddItem(item)) {
+				if (storage.AddContainer(container)) {
+					if (m_StorageList.Add(storage)) {
 						cout << "\n\t Item저장에 성공했습니다.\n";
 						cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
 						container.DisplayAllItem();
-					}
-					else {
-						cout << "\tItem 저장에 실패했습니다\n";
-						return false;
 					}
 				}
 			}
@@ -396,45 +410,74 @@ bool Application::AddItem() {
 	return false; 
 }
 
+// Item을 입력받아 ContainerId가 있으면 MasterList -1이면 TempList에 넣는다.
 bool Application::AddItem(ItemType item) {
 	if (item.GetContainerId() == -1 || item.GetStorageId() == -1) {	// ContainerId == -1이면 TemptList에 저장
-		m_TempList.EnQueue(item);
-		return true;
+		if (m_TempList.EnQueue(item)) {
+			cout << "\n\t Item저장에 성공했습니다\n";
+			DisplayAllItemTempList();
+			return true;
+		}
+		cout << "\n\tItem저장에 실패했습니다\n";
+		return false;
 	}
 	else { // StorageId, ContainerList가 -1이 아니면
 		StorageType storage; // StorageId를 가진 storage를 하나 생성
 		storage.SetId(item.GetStorageId());
-		m_MasterList.Add(item);
-		if (m_StorageList.Retrieve_Binary(storage)) { // StorageId와 같은 storage가 존재하면
-			ContainerType container;
-			container.SetIdFromKB();
-			if (storage.GetContainer(container)) {
-				return container.AddItem(item);
+		if (m_MasterList.Add(item)) {
+			if (m_StorageList.Retrieve_Binary(storage)) { // StorageId와 같은 storage가 존재하면
+				ContainerType container;
+				container.SetId(item.GetContainerId());
+				if (storage.GetContainer(container)) { // containerId와 같은 container가 존재하면
+					if (container.AddItem(item)) {
+						storage.UpdateContainer(container);
+						m_StorageList.Replace(storage);
+						cout << "\n\t Item저장에 성공했습니다.\n";
+						cout << "\n\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
+						container.DisplayAllItem();
+						return true;
+					}
+				}
+				else { // containerId와 같은 container가 없을 시
+					cout << "\n\t=====================Storage:" << storage.GetId() << " Container:" << container.GetId() << " 생성=====================\n";
+					container.SetLocationFromKB();
+					container.AddItem(item);
+					if (storage.AddContainer(container)) {
+						if (m_StorageList.Replace(storage)) {
+							cout << "\n\t Item저장에 성공했습니다.\n";
+							cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
+							container.DisplayAllItem();
+							return true;
+						}
+						else {
+							cout << "\n\tItem저장에 실패했습니다\n";
+							return false;
+						}
+					}
+				}
 			}
-			else {
-				cout << "\t해당하는 container가 없어 새로 만듭니다\n";
+			else { // StorageId와 같은 storage가 존재하지 않을 때(container도 당연히 없다)
+				int InMaxNum;
+				cout << "\n\t=====================Storage:" << storage.GetId() << " 생성=====================\n";
+				ContainerType container;
+				cout << "\t해당하는 storage가 없어 새로 만듭니다.\n";
+				cout << "\t최대 보관가능한 컨테이터의 개수를 입력하시오 : ";
+				cin >> InMaxNum;
+				storage.SetMaxNum(InMaxNum);
+				cout << "\n\t=====================Storage:" << storage.GetId() << " Container:" << item.GetContainerId() << " 생성=====================\n";
+				container.SetId(item.GetContainerId());
 				container.SetLocationFromKB();
-				return storage.AddContainer(container);
+				container.AddItem(item);
+				if (storage.AddContainer(container)) {
+					if (m_StorageList.Add(storage)) {
+						cout << "\n\t Item저장에 성공했습니다.\n";
+						cout << "\t=====================Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
+						container.DisplayAllItem();
+					}
+				}
 			}
 		}
-		else {
-			int InMaxNum;
-			cout << "\t해당하는 storage가 없어 새로 만듭니다.\n";
-			cout << "\t최대 보관가능한 컨테이터의 개수를 입력하시오 : ";
-			cin >> InMaxNum;
-			storage.SetMaxNum(InMaxNum);
-			ContainerType container;
-			container.SetIdFromKB();
-			if (storage.GetContainer(container)) {
-				return container.AddItem(item);
-			}
-			else {
-				cout << "\t해당하는 container가 없어 새로 만듭니다\n";
-				container.SetLocationFromKB();
-				storage.AddContainer(container);
-				return container.AddItem(item);
-			}
-		}
+		return false;
 	}
 	return false;
 }
@@ -452,8 +495,7 @@ bool Application::DeleteItemMasterList() {
 		storage.GetContainer(container);
 		if (container.DeleteItem(item)) {
 			m_MasterList.Delete(item);
-			cout << "\t성공적으로 삭제되었습니다\n";
-			cout << "\t---------------삭제 후 ContainerList---------------\n";
+			cout << "\t=====================삭제 후 Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
 			container.DisplayAllItem();
 			return true;
 		}
@@ -477,7 +519,8 @@ bool Application::ReplaceItemMasterList()
 		storage.GetContainer(container);
 		if (container.UpdateItem(item)) {
 			m_MasterList.Replace(item);
-			cout << "\t성공적으로 수정되었습니다\n";
+			cout << "\t=====================수정 후 Storage:" << item.GetStorageId() << " Container:" << item.GetContainerId() << "=====================\n";
+			container.DisplayAllItem();
 			return true;
 		}
 	}
@@ -485,10 +528,12 @@ bool Application::ReplaceItemMasterList()
 	return false;
 }
 
+// Id을 입력받아 MasterList에서 검색함
 bool Application::RetrieveItemMasterList()
 {
 	ItemType item;
 	item.SetIdFromKB();
+	cout << "\n\t=====================Item ID:" << item.GetId() << "=====================\n";
 	if (m_MasterList.Retrieve_Binary(item)) {
 		item.DisplayGoodsOnScreen();
 		return true;
@@ -497,14 +542,16 @@ bool Application::RetrieveItemMasterList()
 	return false;
 }
 
+// item 종류를 입력받아 MasterList에서 검색함
 bool Application::SearchByKindMasterList()
 {
 	ItemType item;
 	ItemType temp;
-	bool found;
+	bool found = false;
 	item.SetKindFromKB();
 
 	m_MasterList.ResetList();
+	cout << "\n\t=====================Item Kind:" << item.GetKind() << "=====================\n";
 	for (int CurPos = 0; CurPos < m_MasterList.GetLength(); CurPos++) {
 		m_MasterList.GetNextItem(temp);
 		if (temp.GetKind() == item.GetKind()) {
@@ -520,14 +567,16 @@ bool Application::SearchByKindMasterList()
 
 }
 
+// item 이름을 입력받아 MasterList에서 검색함
 bool Application::SearchByNameMasterList()
 {
 	ItemType item;
 	ItemType temp;
-	bool found;
+	bool found = false;
 	item.SetNameFromKB();
 
 	m_MasterList.ResetList();
+	cout << "\n\t=====================Item Name:" << item.GetName() << "=====================\n";
 	for(int CurPos = 0; CurPos < m_MasterList.GetLength(); CurPos++) {
 		m_MasterList.GetNextItem(temp);
 		if (temp.GetName() == item.GetName()) {
@@ -542,14 +591,16 @@ bool Application::SearchByNameMasterList()
 	return true;
 }
 
+// item 구매일 입력받아 MasterList에서 검색함
 bool Application::SearchByPurchaseDayMasterList()
 {
 	ItemType item;
 	ItemType temp;
-	bool found;
+	bool found = false;
 	item.SetPurchaseDayFromKB();
 
 	m_MasterList.ResetList();
+	cout << "\n\t=====================Item PurchaseDay:" << item.GetPurchaseDay() << "=====================\n";
 	for (int CurPos = 0; CurPos < m_MasterList.GetLength(); CurPos++) {
 		m_MasterList.GetNextItem(temp);
 		if (temp.GetPurchaseDay() == item.GetPurchaseDay()) {
@@ -564,6 +615,7 @@ bool Application::SearchByPurchaseDayMasterList()
 	return true;
 }
 
+// make MasterList, StorageList empty
 void Application::MakeEmptyMasterList()
 {
 	m_MasterList.MakeEmpty();
@@ -575,17 +627,19 @@ void Application::MakeEmptyMasterList()
 	}
 }
 
+// display all records in MasterList on screen
 void Application::DisplayAllItemMasterList()
 {
 	ItemType item;
 	m_MasterList.ResetList();
-	cout << "\t--------------------전체 item List-----------------\n";
+	cout << "\t=====================MastserList=====================\n";
 	for (int CurPos = 0; CurPos < m_MasterList.GetLength(); CurPos++) {
 		m_MasterList.GetNextItem(item);
 		item.DisplayGoodsOnScreen();
 	}
 }
 
+// move item in MasterList to TempList
 bool Application::MoveItemMasterToTemp()
 {
 	ItemType item;
@@ -617,6 +671,7 @@ bool Application::MoveItemMasterToTemp()
 	return false;
 }
 
+// RunContainer에 쓸 StorageId를 입력받음	
 int Application::GetStorageId()
 {
 	int InStorageId;
@@ -625,6 +680,7 @@ int Application::GetStorageId()
 	return InStorageId;
 }
 
+// StorageId를 입력받아 그 안에 있는 container의 정보와 리스트를 출력함
 void Application::DisplayAllContainer()
 {
 	StorageType storage;
@@ -632,10 +688,17 @@ void Application::DisplayAllContainer()
 	cout << "\t저장소의 ID를 입력하시오 : ";
 	cin >> storageId;
 	storage.SetId(storageId);
-	m_StorageList.Retrieve_Binary(storage);
-	storage.DisplayAllContainer();
+	if (m_StorageList.Retrieve_Binary(storage)) {
+		cout << "\t=====================Storage:" << storage.GetId() << " Container 정보=====================\n";
+		storage.DisplayAllContainer();
+		cout << "\t-----------------------------------------------\n";
+	}
+	else {
+		cout << "\t찾으려는 ID의 저장소가 없습니다.\n";
+	}
 }
 
+// StorageId를 입력받아 그 안에 있는 container의 상세 정보와 리스트를 MasterList를 참조해 출력함
 void Application::DisPlayAllDetailsContainer()
 {
 	StorageType storage;
@@ -643,25 +706,36 @@ void Application::DisPlayAllDetailsContainer()
 	cout << "\t저장소의 ID를 입력하시오 : ";
 	cin >> storageId;
 	storage.SetId(storageId);
-	m_StorageList.Retrieve_Binary(storage);
-	storage.DisplayAllDetailsContainer(m_MasterList);
+	if (m_StorageList.Retrieve_Binary(storage)) {
+		cout << "\t=====================Storage:" << storage.GetId() << " Container 정보=====================\n";
+		storage.DisplayAllDetailsContainer(m_MasterList);
+		cout << "\t-----------------------------------------------\n";
+	}
+	else {
+		cout << "\t찾으려는 ID의 저장소가 없습니다.\n";
+	}
 }
 
+// 저장소의 Container 목록을 출력한다
 void Application::PrintContainerList(StorageType& storage)
 {
+	cout << "\t=====================Storage:" << storage.GetId() << " Container 정보=====================\n";
 	storage.DisplayAllContainer();
 }
 
+// 저장소의 Container에 photo를 추가한다.
 bool Application::AddPhoto(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
 	if (storage.GetContainer(container)) {
 		string photo;
-		cout << "\t추가할 Photo를 입력하시오 : \n";
+		cout << "\t추가할 Photo를 입력하시오 : ";
 		cin >> photo;
 		if (container.AddPhoto(photo)) {
+			storage.UpdateContainer(container);
 			cout << "\tPhoto를 성공적으로 추가했습니다.\n";
+			cout << "\t=====================Storage:" << storage.GetId() << " Container:" << container.GetId() << " PhotoList=====================\n";
 			container.DisplayAllPhoto();
 			return true;
 		}
@@ -676,16 +750,21 @@ bool Application::AddPhoto(StorageType& storage)
 	}
 }
 
+// 저장소의 Container에서 입력받은 photo를 제거한다.
 bool Application::DeletePhoto(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
 	if (storage.GetContainer(container)) {
 		string photo;
-		cout << "\t제거할 Photo를 입력하시오 : \n";
+		cout << "\t=====================Storage:" << storage.GetId() << " Container:" << container.GetId() << " PhotoList=====================\n";
+		container.DisplayAllPhoto();
+		cout << "\n\t제거할 Photo를 입력하시오 : ";
 		cin >> photo;
 		if (container.DeletePhoto(photo)) {
+			storage.UpdateContainer(container);
 			cout << "\tPhoto를 성공적으로 제거했습니다.\n";
+			cout << "\t=====================삭제 후 Storage:" << storage.GetId() << " Container:" << container.GetId() << " PhotoList=====================\n";
 			container.DisplayAllPhoto();
 			return true;
 		}
@@ -700,16 +779,21 @@ bool Application::DeletePhoto(StorageType& storage)
 	}
 }
 
+// 저장소의 Container에서 입력받은 photo를 수정한다.
 bool Application::UpdatePhoto(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
 	if (storage.GetContainer(container)) {
 		string photo;
-		cout << "\t수정할 Photo를 입력하시오 : \n";
+		cout << "\t=====================Storage:" << storage.GetId() << " Container:" << container.GetId() << " PhotoList=====================\n";
+		container.DisplayAllPhoto();
+		cout << "\n\t수정할 Photo를 입력하시오 : \n";
 		cin >> photo;
 		if (container.UpdatePhoto(photo)) {
+			storage.UpdateContainer(container);
 			cout << "\tPhoto를 성공적으로 수정했습니다.\n";
+			cout << "\t=====================수정 후 Storage:" << storage.GetId() << " Container:" << container.GetId() << " PhotoList=====================\n";
 			container.DisplayAllPhoto();
 			return true;
 		}
@@ -724,11 +808,13 @@ bool Application::UpdatePhoto(StorageType& storage)
 	}
 }
 
+// 저장소의 Container의 photolist를 출력한다
 bool Application::PrintPhotoList(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
 	if (storage.GetContainer(container)) {
+		cout << "\t=====================Storage:" << storage.GetId() << " Container:" << container.GetId() << " PhotoList=====================\n";
 		container.DisplayAllPhoto();
 		return true;
 	}
@@ -738,6 +824,7 @@ bool Application::PrintPhotoList(StorageType& storage)
 	}
 }
 
+// 저장소의 Container에서 item을 검색한다.
 bool Application::RetrieveItemContainerList(StorageType& storage)
 {
 	ContainerType container;
@@ -760,13 +847,14 @@ bool Application::RetrieveItemContainerList(StorageType& storage)
 	}
 }
 
+// 저장소의 Container에서 item을 kind로 검색한다.
 bool Application::SearchByKindContainerList(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
+	cout << "\n";
 	if (storage.GetContainer(container)) {
 		SimpleItemType item;
-		item.SetKindFromKB();
 		if (container.FindByKind(item)) {
 			return true;
 		}
@@ -781,13 +869,13 @@ bool Application::SearchByKindContainerList(StorageType& storage)
 	}
 }
 
+// 저장소의 Container에서 item을 Name으로 검색한다.
 bool Application::SearchByNameContainerList(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
 	if (storage.GetContainer(container)) {
 		SimpleItemType item;
-		item.SetNameFromKB();
 		if (container.FindByName(item)) {
 			return true;
 		}
@@ -802,28 +890,28 @@ bool Application::SearchByNameContainerList(StorageType& storage)
 	}
 }
 
+// 저장소의 Container를 비운다.
 void Application::MakeEmptyContainer(StorageType& storage)
 {
 	ContainerType container;
 	container.SetIdFromKB();
-	int InContainerId = container.GetId();
 	if (storage.GetContainer(container)) {
-		container.MakeEmpty();
-		ItemType item;
-		m_MasterList.ResetList();
-		int length = m_MasterList.GetLength();
-		for (int i = 0; i < length; i++) {
-			m_MasterList.GetNextItem(item);
-			if (item.GetContainerId() == container.GetId() && item.GetStorageId() == storage.GetId()) {
-				m_MasterList.Delete(item);
-			}
+		container.ResetSimpleList();
+		SimpleItemType simpleitem;
+		while (container.GetNextSimpleItem(simpleitem)) {
+			ItemType item;
+			item.SetId(simpleitem.GetId());
+			m_MasterList.Delete(item);
 		}
+		container.MakeEmpty();
+		cout << "\n\tContainer:" << container.GetId() << " 가 성공적으로 비워졌습니다\n\n";
 	}
 	else {
 		cout << "\t찾으려는 container가 존재하지 않습니다\n";
 	}
 }
 
+// 저장소의 container에 있는 모든 item을 출력한다.
 void Application::DisplayAllItemContainer(StorageType& storage)
 {
 	ContainerType container;
@@ -836,13 +924,14 @@ void Application::DisplayAllItemContainer(StorageType& storage)
 	}
 }
 
+// receive keynumber from keyboard and find item in TempList which same keynumber and delete that item
 bool Application::DeleteItemTempList()
 {
 	ItemType item;
 	item.SetIdFromKB();
 	if (m_TempList.Delete(item)) {
-		cout << "\t성공적으로 삭제했습니다\n";
-		cout << "\t-----------------삭제 후 TempList--------------------\n";
+		cout << "\t성공적으로 삭제했습니다\n\n";
+		cout << "\t=====================삭제 후 TempList=====================\n";
 		m_TempList.DisplayAllTempItems();
 		return true;
 	}
@@ -852,6 +941,7 @@ bool Application::DeleteItemTempList()
 	}
 }
 
+// receive Goods record from keyboard and find item has same keynumber and replace the record with new record
 bool Application::ReplaceItemTempList()
 {
 	ItemType item;
@@ -860,21 +950,25 @@ bool Application::ReplaceItemTempList()
 	item.SetNameFromKB();
 	item.SetPriceFromKB();
 	item.SetIdFromKB();
+	item.SetStorageId(-1);
+	item.SetContainerId(-1);
 
-	if (m_MasterList.Replace(item)) {
-		cout << "\t성공적으로 item을 수정했습니다.\n";
+	if (m_TempList.Replace(item)) {
+		cout << "\n\t성공적으로 item을 수정했습니다.\n";
 		return true;
 	}
 	else {
-		cout << "\t찾으려는 itme이 존재하지 않습니다.\n";
+		cout << "\t찾으려는 item이 존재하지 않습니다.\n";
 		return false;
 	}
 }
 
+// receive ID from keyboard and find item which has same ID and display that record on screen
 bool Application::RetrieveItemTempList()
 {
 	ItemType item;
 	item.SetIdFromKB();
+	cout << "\n\t=====================Item ID:" << item.GetId() << "=====================\n";
 	if (m_TempList.Retrieve(item)) {
 		item.DisplayGoodsOnScreen();
 		return true;
@@ -885,42 +979,53 @@ bool Application::RetrieveItemTempList()
 	}
 }
 
+// receive word from keyboard and display the kind of item Kind display that record on screen
 bool Application::SearchByKindTempList()
 {
+	cout << "\t=====================Item=====================\n";
 	return m_TempList.SearchByKind();
 }
 
+// receive Name from keyboard and find item which Name include the Name and display that record on screen
 bool Application::SearchByNameTempList()
 {
+	cout << "\t=====================Item=====================\n";
 	return m_TempList.SearchByName();
 }
 
+// receive PurchaseDay from keyboard and find item which Name include the PurchaseDay and display that record on screen
 bool Application::SearchByPurchaseDayTempList()
 {
+	cout << "\t=====================Item=====================\n";
 	return m_TempList.SearchByPurchaseDay();
 }
 
+// make TempList empty
 void Application::MakeEmptyTempList()
 {
 	m_TempList.MakeEmpty();
 }
 
+// display all records in list on screen
 void Application::DisplayAllItemTempList()
 {
+	cout << "\t=====================TempList=====================\n";
 	m_TempList.DisplayAllTempItems();
 }
 
+// move all items in TempList to MasterList
 void Application::MoveItemTempToMaster()
 {
 	ItemType item;
+	cout << "\t=====================TempList=====================\n";
 	int length = m_TempList.GetNumOfItems();
 	for (int i = 0; i < length; i++) {
 		m_TempList.DeQueue(item);
 		item.DisplayGoodsOnScreen();
 		int ContainerId, StorageId;
-		cout << "\t옮기고 싶은 StorageId를 입력하시오 : \n";
+		cout << "\t옮기고 싶은 StorageId를 입력하시오 : ";
 		cin >> StorageId;
-		cout << "\t옮기고 싶은 ContainerId를 입력하시오 : \n";
+		cout << "\t옮기고 싶은 ContainerId를 입력하시오 : ";
 		cin >> ContainerId;
 
 		if (StorageId == -1 || ContainerId == -1) {

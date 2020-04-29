@@ -97,16 +97,16 @@ public:
 	bool SearchByPurchaseDayMasterList();
 
 	/*
-		@brief	make MasterList, StorageList empty
+		@brief	make MasterList empty
 		@pre	none
-		@post	make MasterList, StorageList empty
+		@post	make MasterList empty
 	*/
 	void MakeEmptyMasterList();
 
 	/*
-		@brief	display all records in list on screen
+		@brief	display all records in MasterList on screen
 		@pre	list should be initialized
-		@post	display all records in list on screen
+		@post	display all records in MasterList on screen
 	*/
 	void DisplayAllItemMasterList();
 
@@ -120,89 +120,113 @@ public:
 
 	//----------------------- RunStorage -----------------------------------------------------
 
-
+	/*
+		@brief	RunContainer에 쓸 StorageId를 입력받음	
+		@pre	none
+		@post	none
+		@return	return StorageId
+	*/
 	int GetStorageId();
 
+	/*
+		@brief	StorageId를 입력받아 그 안에 있는 container의 정보와 리스트를 출력함
+		@pre	storageList가 초기화돼야함
+		@post	입력받은 Storage안에 있는 container의 정보와 리스트가 출력됨
+	*/
 	void DisplayAllContainer();
 
+	/*
+		@brief	StorageId를 입력받아 그 안에 있는 container의 상세 정보와 리스트를 MasterList를 참조해 출력함
+		@pre	MasterList와 storageList가 초기화돼야함
+		@post	입력받은 Storage안에 있는 container의 상세 정보와 리스트가 출력됨
+	*/
 	void DisPlayAllDetailsContainer();
 	//----------------------- RunContainer ---------------------------------------------------
 
 	/*
-		@brief	receive keynumber from keyboard and find item in Masterlist which same keynumber and delete that item
-		@pre	MasterList should be initialized
-		@post	the record is deleted in MasterList
-		@return if function works return true, otherwise return false
+		@brief	저장소의 Container 목록을 출력한다
+		@pre	m_StorageList가 초기화돼야한다
+		@post	Container 목록이 출력된다.
+		@param	storage	참조할 StorageType
 	*/
 	void PrintContainerList(StorageType& storage);
 
 	/*
-		@brief
-		@pre
-		@post
-		@return
+		@brief	저장소의 Container에 photo를 추가한다.
+		@pre	m_StorageList가 초기화돼야한다
+		@post	저장소의 Container에 photo를 추가된다.
+		@param	storage	참조할 StorageType
+		@return	Photo가 추가되면 return true, 아니면 return false
 	*/
 	bool AddPhoto(StorageType& storage);
 
 	/*
-		@brief	receive Goods record from keyboard and find item has same keynumber and replace the record with new record
-		@pre	MasterList should be initialized
-		@post	the record is replace with new record
-		@return if function works return true, otherwise return false
+		@brief	저장소의 Container에서 입력받은 photo를 제거한다.
+		@pre	m_StorageList가 초기화돼야한다
+		@post	저장소의 Container에 입력받은 photo가 제거된다.
+		@param	storage	참조할 StorageType
+		@return	Photo가 제거되면 return true, 아니면 return false
 	*/
 	bool DeletePhoto(StorageType& storage);
 
 	/*
-		@brief	
-		@pre	
-		@post	
-		@return	
+		@brief	저장소의 Container에서 입력받은 photo를 수정한다.
+		@pre	m_StorageList가 초기화돼야한다
+		@post	저장소의 Container에 입력받은 photo가 수정된다.
+		@param	storage	참조할 StorageType
+		@return	Photo가 수정되면 return true, 아니면 return false
 	*/
 	bool UpdatePhoto(StorageType& storage);
 
 	/*
-		@brief
-		@pre
-		@post
-		@return
+		@brief	저장소의 Container의 photolist를 출력한다
+		@pre	m_StorageList가 초기화돼야한다.
+		@post	저장소의 Container에 있는 photolist가 출력된다.
+		@param	storage	참조할 StorageType
+		@return	Photolist가 출력되면 return true, 아니면 return false
 	*/
 	bool PrintPhotoList(StorageType& storage);
 
 	/*
-		@brief	receive ID from keyboard and find item which has same ID and display that record on screen
-		@pre	Masterlist should be initialized
-		@post	record user wanted to find displayed on screen
-		@return if function works return true, otherwise return false
+		@brief	저장소의 Container에서 item을 검색한다.
+		@pre	m_StorageList가 초기화돼야한다.
+		@post	저장소의 Container에 있는 item을 검색한 후 참조함
+		@param	storage	참조할 StorageType
+		@return	item을 찾으면 return true, 아니면 return false
 	*/
 	bool RetrieveItemContainerList(StorageType& storage);
 
 	/*
-		@brief	receive word from keyboard and display the kind of item Kind display that record on screen
-		@pre	Masterlist should be initialized
-		@post	the records wanted to find displayed on screen
-		@return if function works return true, otherwise return false
+		@brief	저장소의 Container에서 item을 kind로 검색한다.
+		@pre	m_StorageList가 초기화돼야한다.
+		@post	저장소의 Container에 있는 item을 kind로 검색한 후 참조함
+		@param	storage	참조할 StorageType
+		@return	item을 찾으면 return true, 아니면 return false
 	*/
 	bool SearchByKindContainerList(StorageType& storage);
 
 	/*
-		@brief	receive Name from keyboard and find item which Name include the Name and display that record on screen
-		@pre	Masterlist should be initialized
-		@post	the records wanted to find displayed on screen
-		@return if function works return true, otherwise return false
+		@brief	저장소의 Container에서 item을 Name으로 검색한다.
+		@pre	m_StorageList가 초기화돼야한다.
+		@post	저장소의 Container에 있는 item을 Name으로 검색한 후 참조함
+		@param	storage	참조할 StorageType
+		@return	item을 찾으면 return true, 아니면 return false
 	*/
 	bool SearchByNameContainerList(StorageType& storage);
 
 	/*
-		@brief	make MasterList empty
+		@brief	저장소의 Container를 비운다.
 		@pre	none
-		@post	make MasterList empty
+		@post	저장소의 Container가 비워진다.
+		@param	storage	참조할 StorageType
 	*/
 	void MakeEmptyContainer(StorageType& storage);
 
 	/*
-		@brief	display all records in list on screen
-		@pre	list should be initialized
-		@post	display all records in list on screen
+		@brief	저장소의 container에 있는 모든 item을 출력한다.
+		@pre	m_StorageList가 초기화돼야한다.
+		@post	저장소의 container에 있는 모든 item이 출력된다.
+		@param	storage	참조할 StorageType
 	*/
 	void DisplayAllItemContainer(StorageType& storage);
 
@@ -271,9 +295,9 @@ public:
 	void DisplayAllItemTempList();
 
 	/*
-		@brief	move item in TempList to MasterList
+		@brief	move all items in TempList to MasterList
 		@pre	MasterList and TempList should be initialized
-		@post	item in TempList moved to MasterList
+		@post	items in TempList moved to MasterList
 		@return if function works return true, otherwise return false
 	*/
 	void MoveItemTempToMaster();

@@ -57,24 +57,28 @@ void SimpleItemType::SetSimpleItem(int InId, string InName, int InKind)
 	SetKind(InKind);
 }
 
+// m_Id를 키보드로부터 받아 set한다.
 void SimpleItemType::SetIdFromKB()
 {
 	cout << "\t물품의 Id를 입력하시오 : ";
 	cin >> m_Id;
 }
 
+// m_Name을 키보드로부터 받아 set한다.
 void SimpleItemType::SetNameFromKB()
 {
 	cout << "\t물품의 이름을 입력하시오 : ";
 	cin >> m_Id;
 }
 
+// m_Kind를 키보드로부터 받아 set한다.
 void SimpleItemType::SetKindFromKB()
 {
 	cout << "\t물품의 종류을 입력하시오(책=1, 학용품=2, 화장품=3, 전자제품=4, 기타=0) : ";
 	cin >> m_Id;
 }
 
+// set SimpleItem from keyboard
 void SimpleItemType::SetSimpleItemFromKB()
 {
 	SetKindFromKB();

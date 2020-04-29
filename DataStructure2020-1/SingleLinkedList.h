@@ -1,16 +1,16 @@
 #include "pch.h"
 
-template <typename T>
+template <typename ItemType>
 struct NodeType {
-	T info;
+	ItemType info;
 	NodeType* next;
 };
 
-template<typename T>
+template<typename ItemType>
 class SingleLinkedList {
 private:
-	NodeType<T>* m_pList;
-	NodeType<T>* m_pCurPointer;
+	NodeType<ItemType>* m_pList;
+	NodeType<ItemType>* m_pCurPointer;
 	int m_Length;
 public:
 	/*
@@ -45,7 +45,7 @@ public:
 		@param	item	추가하려는 아이템
 		@return	아이템이 추가되었으면 return true,아니면 return false
 	*/
-	bool Add(const T& item);
+	bool Add(const ItemType& item);
 
 	/*
 		@brief	List에서 원하는 item을 가져온다
@@ -54,7 +54,7 @@ public:
 		@param	item	찾고자하는 아이템
 		@return	아이템을 찾았으면 return true, 아니면 return false
 	*/
-	bool Get(T& item);
+	bool Get(ItemType& item);
 
 	/*
 		@brief	List에서 원하는 item을 제거한다
@@ -63,7 +63,7 @@ public:
 		@param	item	제거하려는 아이템
 		@return	아이템을 제거했으면 return true, 아니면 return false
 	*/
-	bool Delete(T& item);
+	bool Delete(ItemType& item);
 
 	/*
 		@brief	List에서 원하는 item을 수정한다.
@@ -72,7 +72,7 @@ public:
 		@param	item	수정하려는 item
 		@return	item을 수정했으면 return true, 아니면 return false
 	*/
-	bool Replace(const T& item);
+	bool Replace(const ItemType& item);
 
 	/*
 		@brief	List의 Pointer를 초기화시킨다
@@ -88,15 +88,15 @@ public:
 		@param	item	next item이 여기에참조된다
 		@return	next item을 참조하면 return true, 아니면 return false
 	*/
-	bool GetNextItem(T& item);
+	bool GetNextItem(ItemType& item);
 
-	void operator=(SingleLinkedList& list) {
+	void operator=(SingleLinkedList list) {
 		MakeEmpty();
 		m_Length = 0;
 
 		if (list.GetLength()) {
 			list.ResetList();
-			T item;
+			ItemType item;
 			while (list.GetNextItem(item)) {
 				Add(item);
 			}
@@ -104,49 +104,56 @@ public:
 	}
 };
 
-template<typename T>
-SingleLinkedList<T>::SingleLinkedList()
+// constructor
+template<typename ItemType>
+SingleLinkedList<ItemType>::SingleLinkedList()
 {
 	m_pList = nullptr;
 	m_pCurPointer = nullptr;
 	m_Length = 0;
 }
 
-template<typename T>
-SingleLinkedList<T>::~SingleLinkedList()
+// destructor
+template<typename ItemType>
+SingleLinkedList<ItemType>::~SingleLinkedList()
 {
 	MakeEmpty();
 }
 
-template<typename T>
-void SingleLinkedList<T>::MakeEmpty()
+// List를 비운다
+template<typename ItemType>
+void SingleLinkedList<ItemType>::MakeEmpty()
 {
-	NodeType<T>* TempPtr;
-	TempPtr = m_pList;
-
-	while (TempPtr != nullptr) {
+	NodeType<ItemType>* TempPtr;
+ 	TempPtr = m_pList;
+	if (m_pList == nullptr) {
+		return;
+	}
+	while (m_pList != nullptr) {
 		TempPtr = m_pList;
 		m_pList = m_pList->next;
-		delete TempPtr;
+		//delete TempPtr; 
 	}
 
 	m_Length = 0;
 }
 
-template<typename T>
-inline int SingleLinkedList<T>::GetLength()
+// m_Length를 반환한다
+template<typename ItemType>
+inline int SingleLinkedList<ItemType>::GetLength()
 {
 	return m_Length;
 }
 
-template<typename T>
-bool SingleLinkedList<T>::Add(const T& item)
+// List에 item을 추가한다
+template<typename ItemType>
+bool SingleLinkedList<ItemType>::Add(const ItemType& item)
 {
 	bool found = false;
 
-	NodeType<T>* PredLoc;
-	NodeType<T>* TempPtr;
-	TempPtr = new NodeType<T>;
+	NodeType<ItemType>* PredLoc;
+	NodeType<ItemType>* TempPtr;
+	TempPtr = new NodeType<ItemType>;
 
 	TempPtr->info = item;
 
@@ -187,8 +194,9 @@ bool SingleLinkedList<T>::Add(const T& item)
 	}
 }
 
-template<typename T>
-bool SingleLinkedList<T>::Get(T& item)
+// List에서 원하는 item을 가져온다
+template<typename ItemType>
+bool SingleLinkedList<ItemType>::Get(ItemType& item)
 {
 	m_pCurPointer = m_pList;
 
@@ -197,22 +205,24 @@ bool SingleLinkedList<T>::Get(T& item)
 			item = m_pCurPointer->info;
 			return true;
 		}
-		if (m_pCurPointer->info < item) {
-			m_pCurPointer = m_pCurPointer->next;
-		}
 		if (m_pCurPointer->info > item) {
 			return false;
 		}
+		if (m_pCurPointer->info < item) {
+			m_pCurPointer = m_pCurPointer->next;
+		}
 	}
+	return false;
 }
 
-template<typename T>
-inline bool SingleLinkedList<T>::Delete(T& item)
+// List에서 원하는 item을 제거한다
+template<typename ItemType>
+inline bool SingleLinkedList<ItemType>::Delete(ItemType& item)
 {
 	bool found = false;
-	NodeType<T>* PredLoc;
-	NodeType<T>* TempPtr;
-	TempPtr = new NodeType<T>;
+	NodeType<ItemType>* PredLoc;
+	NodeType<ItemType>* TempPtr;
+	TempPtr = new NodeType<ItemType>;
 
 	TempPtr->info = item;
 
@@ -252,8 +262,9 @@ inline bool SingleLinkedList<T>::Delete(T& item)
 	}
 }
 
-template<typename T>
-inline bool SingleLinkedList<T>::Replace(const T& item)
+// List에서 원하는 item을 수정한다.
+template<typename ItemType>
+inline bool SingleLinkedList<ItemType>::Replace(const ItemType& item)
 {
 	m_pCurPointer = m_pList;
 
@@ -271,14 +282,16 @@ inline bool SingleLinkedList<T>::Replace(const T& item)
 	}
 }
 
-template<typename T>
-void SingleLinkedList<T>::ResetList()
+// List의 Pointer를 초기화시킨다
+template<typename ItemType>
+void SingleLinkedList<ItemType>::ResetList()
 {
 	m_pCurPointer = nullptr;
 }
 
-template<typename T>
-bool SingleLinkedList<T>::GetNextItem(T& item)
+// 현재 pointer의 next item을 불러온다
+template<typename ItemType>
+bool SingleLinkedList<ItemType>::GetNextItem(ItemType& item)
 {
 	if (m_pCurPointer == nullptr) {
 		m_pCurPointer = m_pList;

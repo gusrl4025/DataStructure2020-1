@@ -44,7 +44,7 @@ public:
 		@paran	data	new data
 		@return	return 1 if record is added to list successfully otherwise return 0
 	*/
-	int Add(const ItemType& data);
+	int Add(ItemType data);
 
 	/*
 		@brief	initilize list iterator
@@ -116,7 +116,7 @@ SortedList<ItemType>::SortedList() {
 
 template<typename ItemType>
 SortedList<ItemType>::~SortedList() {
-	delete[] m_Array;
+	//delete[] m_Array;
 }
 
 // make list empty
@@ -140,13 +140,13 @@ bool SortedList<ItemType>::IsFull() const {
 
 // add new record in list
 template<typename ItemType>
-int SortedList<ItemType>::Add(const ItemType& data) {
+int SortedList<ItemType>::Add(ItemType data) {
 	if (IsFull()) {
 		ItemType* TempList = new ItemType[m_Length];
 		for (int i = 0; i < m_Length; ++i) {
 			TempList[i] = m_Array[i];
 		}
-		delete[] m_Array;
+		//delete[] m_Array;
 		m_MaxSize += MAXSIZE;
 		m_Array = new ItemType[m_MaxSize];
 		for (int i = 0; i < m_Length; ++i) {
@@ -243,30 +243,16 @@ bool SortedList<ItemType>::Retrieve_Binary(ItemType& data) {
 // delete item which is same with param
 template<typename ItemType>
 bool SortedList<ItemType>::Delete(ItemType data) {
-	int curPos = 0;
-	bool found = false;
-
-	int first = 0;
-	int last = m_Length - 1;
-	int mid;
-
-	while (!found && (first > last)) {
-		mid = (first + last) / 2;
-		if (m_Array[mid] == data) {
-			m_Array[mid] = data;
-			found = true;
-			return true;
-		}
-		if (m_Array[mid] > data) {
-			last = mid - 1;
-			break;
-		}
-		if (m_Array[mid] < data) {
-			first = mid + 1;
-			break;
+	for (m_CurPointer = 0; m_CurPointer < m_Length; m_CurPointer++) { // 리스트의 길이만큼 검색한다.
+		if (data == m_Array[m_CurPointer]) {	// 찾고자 하는 data와 같은 item을 발견하면
+			for (int i = m_CurPointer; i < m_Length - 1; i++) {
+				m_Array[i] = m_Array[i + 1];	// item을 data의 정보로 교체한다.
+			}
+			m_Length--;
+			return true; // 함수가 잘 작동했으므로 true를 return한다.
 		}
 	}
-	return false;
+	return false;	// 함수가 잘 작동하지 못했으므로 false를 return한다.
 }
 
 // replace item which has same keynumber with param

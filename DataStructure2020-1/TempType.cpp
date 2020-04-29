@@ -12,6 +12,7 @@ TempType::~TempType()
 {
 }
 
+// TempList가 가득 찼는지 확인
 bool TempType::IsFull() const
 {
 	if (NumOfItems == MAXQUEUE) return true;
@@ -27,10 +28,15 @@ int TempType::GetNumOfItems() const
 // TempList에 item을 Enqueue한다
 bool TempType::EnQueue(const ItemType& item)
 {
-	if (m_TempItemList.EnQueue(item)) {
-		NumOfItems++;
-		return true;
-	};
+	ItemType temp;
+	temp.SetId(item.GetId());
+	if (!m_TempItemList.Retrieve(temp)) {
+		if (m_TempItemList.EnQueue(item)) {
+			NumOfItems++;
+			return true;
+		}
+	}
+	cout << "\t중복된 Id가 있습니다\n";
 	return false;
 }
 
@@ -38,7 +44,7 @@ bool TempType::EnQueue(const ItemType& item)
 bool TempType::DeQueue(ItemType& item)
 {
 	if (m_TempItemList.DeQueue(item)) {
-		NumOfItems++;
+		NumOfItems--;
 		return true;
 	};
 	return false;
@@ -48,6 +54,7 @@ bool TempType::DeQueue(ItemType& item)
 void TempType::MakeEmpty()
 {
 	m_TempItemList.MakeEmpty();
+	NumOfItems = 0;
 }
 
 // param의 Id와 같은 Id를 가진 item을 TempItemList에서 찾아 참조함
@@ -60,7 +67,7 @@ bool TempType::Retrieve(ItemType& item)
 // param의 Id와 같은 Id를 가진 item을 TempItemList에서 찾아 삭제하고 참조함1
 bool TempType::Delete(ItemType& item)
 {
-	if (Delete(item)) {
+	if (m_TempItemList.Delete(item)) {
 		NumOfItems--;
 		return true;
 	}
@@ -70,7 +77,7 @@ bool TempType::Delete(ItemType& item)
 // param의 Id와 같은 Id를 가진 item을 TempItemList에서 찾아 정보를 Replace한다.
 bool TempType::Replace(const ItemType& item)
 {
-	if (Replace(item)) return true;
+	if (m_TempItemList.Replace(item)) return true;
 	return false;
 }
 
@@ -85,12 +92,14 @@ void TempType::DisplayAllTempItems()
 	}
 }
 
+// 입력받은 Kind와 같은 아이템을 TempList에서 찾아 출력한다.
 bool TempType::SearchByKind()
 {
 	ItemType item;
 	ItemType temp;
 	bool found;
 	item.SetKindFromKB();
+	cout << "\t=====================Item Kind:" << item.GetKind() << "=====================\n";
 	m_TempItemList.ResetList();
 	while (m_TempItemList.GetNextItem(temp) == true) {
 		if (temp.GetKind() == item.GetKind()) {
@@ -105,6 +114,7 @@ bool TempType::SearchByKind()
 	return true;
 }
 
+// 입력받은 Name와 같은 아이템을 TempList에서 찾아 출력한다.
 bool TempType::SearchByName()
 {
 	ItemType item;
@@ -125,6 +135,7 @@ bool TempType::SearchByName()
 	return true;
 }
 
+// 입력받은 PurchaseDay와 같은 아이템을 TempList에서 찾아 출력한다.
 bool TempType::SearchByPurchaseDay()
 {
 	ItemType item;
