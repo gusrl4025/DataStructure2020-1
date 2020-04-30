@@ -49,7 +49,7 @@ public:
 	bool AddItem(ItemType item);
 
 	/*
-		@brief	Id를 입력받아 MasterList와 Container에서 지워줌
+		@brief	Id를 입력받아 MasterList와 Container에서 지워준다
 		@pre	MasterList, Container가 초기화 돼야한다
 		@post	the record is deleted in MasterList, Container
 		@return if function works return true, otherwise return false
@@ -57,7 +57,7 @@ public:
 	bool DeleteItemMasterList();
 
 	/*
-		@brief	Item을 입력받아 MasterList와 Container에서 수정함
+		@brief	Item을 입력받아 MasterList와 Container에서 수정한다
 		@pre	MasterList, Container가 초기화 돼야한다
 		@post	the record is replaced in MasterList, Container
 		@return if function works return true, otherwise return false
@@ -65,7 +65,7 @@ public:
 	bool ReplaceItemMasterList();
 
 	/*
-		@brief	Id을 입력받아 MasterList에서 검색함
+		@brief	Id을 입력받아 MasterList에서 검색한다
 		@pre	MasterList가 초기화 돼야한다
 		@post	record user wanted to find displayed on screen
 		@return if function works return true, otherwise return false
@@ -73,7 +73,7 @@ public:
 	bool RetrieveItemMasterList();
 
 	/*
-		@brief	item 종류를 입력받아 MasterList에서 검색함
+		@brief	item 종류를 입력받아 MasterList에서 검색한다
 		@pre	Masterlist should be initialized
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
@@ -81,7 +81,7 @@ public:
 	bool SearchByKindMasterList();
 
 	/*
-		@brief	item 이름을 입력받아 MasterList에서 검색함
+		@brief	item 이름을 입력받아 MasterList에서 검색한다
 		@pre	Masterlist should be initialized
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
@@ -89,12 +89,20 @@ public:
 	bool SearchByNameMasterList();
 
 	/*
-		@brief	item 구매일 입력받아 MasterList에서 검색함
+		@brief	item의 구매일을 입력받아 MasterList에서 검색한다
 		@pre	Masterlist should be initialized
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
 	*/
 	bool SearchByPurchaseDayMasterList();
+
+	/*
+		@brief	item의 구매일을 구간으로 입력받아 MasterList에서 검색한다
+		@pre	Masterlist should be initialized
+		@post	the records wanted to find displayed on screen
+		@return if function works return true, otherwise return false
+	*/
+	bool SearchByPurchasePeriod();
 
 	/*
 		@brief	make MasterList empty
@@ -140,7 +148,7 @@ public:
 		@pre	MasterList와 storageList가 초기화돼야함
 		@post	입력받은 Storage안에 있는 container의 상세 정보와 리스트가 출력됨
 	*/
-	void DisPlayAllDetailsContainer();
+	//void DisPlayAllDetailsContainer();
 	//----------------------- RunContainer ---------------------------------------------------
 
 	/*
@@ -302,7 +310,7 @@ public:
 	*/
 	void MoveItemTempToMaster();
 private:
-	SortedList<ItemType> m_MasterList;
+	DoublySortedLinkedList<ItemType> m_MasterList;
 	TempType m_TempList;
 	SortedList<StorageType> m_StorageList;
 	int m_Command;

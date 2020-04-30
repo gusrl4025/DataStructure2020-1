@@ -65,6 +65,12 @@ void StorageType::MakeEmpty()
 	ContainerList.MakeEmpty();
 }
 
+// 
+void StorageType::ResetList()
+{
+	ContainerList.ResetList();
+}
+
 // 원하는 container를 찾아서 parameter에 참조한다
 bool StorageType::GetContainer(ContainerType& container)
 {
@@ -116,18 +122,5 @@ void StorageType::DisplayAllContainer()
 		container.DisplayContainerOnScreen();
 		container.DisplayAllPhoto();
 		container.DisplayAllItem();
-	}
-}
-
-// matserlist에 접근해 container에 대한 모든 정보를 출력한다
-void StorageType::DisplayAllDetailsContainer(SortedList<ItemType>& ItemList)
-{
-	ContainerType container;
-	ContainerList.ResetList();
-	for (int i = 0; i < CurrentNum; i++) {
-		ContainerList.GetNextItem(container);
-		container.DisplayContainerOnScreen();
-		container.DisplayAllPhoto();
-		container.DisplayAllDetailsItem(ItemList);
 	}
 }

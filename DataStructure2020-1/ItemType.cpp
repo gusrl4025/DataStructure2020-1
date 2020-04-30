@@ -9,7 +9,7 @@ void ItemType::SetKindFromKB() {
 
 // set PurchaseDay of Goods from keyboard
 void ItemType::SetPurchaseDayFromKB() {
-	cout << "\t물품의 구매일를 입력하시오 : ";
+	cout << "\t물품의 구매일를 입력하시오(예: 19970602 (1997년6월2일)) : ";
 	cin >> m_PurchaseDay;
 }
 

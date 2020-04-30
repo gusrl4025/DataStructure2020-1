@@ -49,6 +49,12 @@
     <ClInclude Include="pch.h">
       <Filter>App</Filter>
     </ClInclude>
+    <ClInclude Include="DoublySortedLinkedList.h">
+      <Filter>List</Filter>
+    </ClInclude>
+    <ClInclude Include="DoublyIterator.h">
+      <Filter>List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">

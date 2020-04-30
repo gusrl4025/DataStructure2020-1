@@ -44,7 +44,7 @@ public:
 		@paran	data	new data
 		@return	return 1 if record is added to list successfully otherwise return 0
 	*/
-	int Add(ItemType data);
+	int Add(const ItemType& data);
 
 	/*
 		@brief	initilize list iterator
@@ -87,7 +87,7 @@ public:
 		@param	data	data to delete
 		@return	if function works successfully return true, otherwise return false
 	*/
-	bool Delete(ItemType data);
+	bool Delete(ItemType& data);
 
 	/*
 		@brief	replace item which has same keynumber with param
@@ -96,7 +96,7 @@ public:
 		@param	data	data to replace
 		@return	if function works successfully return true, otherwise return false
 	*/
-	bool Replace(ItemType data);
+	bool Replace(const ItemType& data);
 
 private:
 	ItemType* m_Array; // 레코드배열
@@ -140,7 +140,7 @@ bool SortedList<ItemType>::IsFull() const {
 
 // add new record in list
 template<typename ItemType>
-int SortedList<ItemType>::Add(ItemType data) {
+int SortedList<ItemType>::Add(const ItemType& data) {
 	if (IsFull()) {
 		ItemType* TempList = new ItemType[m_Length];
 		for (int i = 0; i < m_Length; ++i) {
@@ -242,7 +242,7 @@ bool SortedList<ItemType>::Retrieve_Binary(ItemType& data) {
 
 // delete item which is same with param
 template<typename ItemType>
-bool SortedList<ItemType>::Delete(ItemType data) {
+bool SortedList<ItemType>::Delete(ItemType& data) {
 	for (m_CurPointer = 0; m_CurPointer < m_Length; m_CurPointer++) { // 리스트의 길이만큼 검색한다.
 		if (data == m_Array[m_CurPointer]) {	// 찾고자 하는 data와 같은 item을 발견하면
 			for (int i = m_CurPointer; i < m_Length - 1; i++) {
@@ -257,9 +257,9 @@ bool SortedList<ItemType>::Delete(ItemType data) {
 
 // replace item which has same keynumber with param
 template<typename ItemType>
-bool SortedList<ItemType>::Replace(ItemType data) {
+bool SortedList<ItemType>::Replace(const ItemType& data) {
 	for (m_CurPointer = 0; m_CurPointer < m_Length; m_CurPointer++) { // 리스트의 길이만큼 검색한다.
-		if (data == m_Array[m_CurPointer]) {	// 찾고자 하는 data와 같은 item을 발견하면
+		if (m_Array[m_CurPointer] == data) {	// 찾고자 하는 data와 같은 item을 발견하면
 			m_Array[m_CurPointer] = data;	// item을 data의 정보로 교체한다.
 			return true;	// 함수가 잘 작동했으므로 true를 return한다.
 		}

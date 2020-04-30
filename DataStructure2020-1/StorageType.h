@@ -69,6 +69,13 @@ public:
 	void MakeEmpty();
 
 	/*
+		@brief	포인터를 초기화시킨다.
+		@pre	none
+		@post	포인터가 초기화된다.
+	*/
+	void ResetList();
+
+	/*
 		@brief	원하는 container를 찾아서 parameter에 참조한다
 		@pre	list가 초기화돼야한다
 		@post	찾은 container가 parameter에 참조된다
@@ -119,14 +126,6 @@ public:
 		@post	container목록이 출력된다
 	*/
 	void DisplayAllContainer();
-
-	/*
-		@brief	matserlist에 접근해 container에 대한 모든 정보를 출력한다
-		@pre	containerlist가 초기화돼야한다, MasterList가 초기화돼야한다
-		@post	모든 containerlist의 정보가 출력된다.
-		@param	ItemList	MasterList를 참조한다	
-	*/
-	void DisplayAllDetailsContainer(SortedList<ItemType>& ItemList);
 
 	bool operator==(const StorageType& storage) {
 		if (GetId() == storage.GetId()) return true;

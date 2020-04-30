@@ -17,6 +17,8 @@ using namespace std;
 #include "SortedList.h"
 #include "SingleLinkedList.h"
 #include "CircularQueue.h"
+#include "DoublySortedLinkedList.h"
+#include "DoublyIterator.h"
 
 #include "ItemType.h"
 #include "SimpleItemType.h"
