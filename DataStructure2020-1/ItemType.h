@@ -232,6 +232,13 @@ public:
 	void SetStorageIdFromKB();
 
 	/*
+		@brief	set Goods record except storage from keyboard
+		@pre	none
+		@post	Goods record is set
+	*/
+	void SetGoodsExceptStorageFromKB();
+
+	/*
 		@brief	set Goods record from keyboard
 		@pre	none
 		@post	Goods record is set

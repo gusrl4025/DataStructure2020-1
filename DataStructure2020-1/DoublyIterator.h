@@ -26,14 +26,14 @@ private:
 template<typename ItemType>
 inline bool DoublyIterator<ItemType>::NotNull()
 {
-	if (m_pCurPointer == nullptr) return true;
+	if (m_pCurPointer != nullptr) return true;
 	return false;
 }
 
 template<typename ItemType>
 inline bool DoublyIterator<ItemType>::NextNotNull()
 {
-	if (m_pCurPointer->next == nullptr) return true;
+	if (m_pCurPointer->next != nullptr) return true;
 	return false;
 }
 

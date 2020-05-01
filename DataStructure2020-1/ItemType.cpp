@@ -43,6 +43,15 @@ void ItemType::SetStorageIdFromKB() {
 	cin >> m_StorageId;
 }
 
+// set Goods record except storage from keyboard
+void ItemType::SetGoodsExceptStorageFromKB() {
+	SetKindFromKB();
+	SetPurchaseDayFromKB();
+	SetNameFromKB();
+	SetPriceFromKB();
+	SetIdFromKB();
+}
+
 // set Goods record from keyboard
 void ItemType::SetGoodsFromKB() {
 	SetKindFromKB();

@@ -512,8 +512,12 @@ bool Application::DeleteItemMasterList() {
 bool Application::ReplaceItemMasterList()
 {
 	ItemType item;
-	item.SetIdFromKB();
-	if (m_MasterList.Retrieve(item)) {
+	ItemType temp;
+	item.SetGoodsExceptStorageFromKB();
+	temp.SetId(item.GetId());
+	if (m_MasterList.Retrieve(temp)) {
+		item.SetContainerId(temp.GetContainerId());
+		item.SetStorageId(temp.GetStorageId());
 		StorageType storage;
 		storage.SetId(item.GetStorageId());
 		m_StorageList.Retrieve_Binary(storage);
@@ -556,7 +560,7 @@ bool Application::SearchByKindMasterList()
 	item.SetKindFromKB();
 
 	cout << "\n\t=====================Item Kind:" << item.GetKind() << "=====================\n";
-	while (itor.NotNull()) {
+	while (itor.NextNotNull()) {
 		temp = itor.Next();
 		if (temp.GetKind() == item.GetKind()) {
 			temp.DisplayGoodsOnScreen();
@@ -576,20 +580,18 @@ bool Application::SearchByKindMasterList()
 bool Application::SearchByNameMasterList()
 {
 	DoublyIterator<ItemType> itor(m_MasterList);
-	
-
 	ItemType item;
-	ItemType temp;
+	ItemType temp = itor.Next();
 	bool found = false;
 	item.SetNameFromKB();
 
 	cout << "\n\t=====================Item Name:" << item.GetName() << "=====================\n";
-	while (itor.NotNull()) {
-		temp = itor.Next();
+	while (itor.NextNotNull()) {
 		if (temp.GetName() == item.GetName()) {
 			temp.DisplayGoodsOnScreen();
 			found = true;
 		}
+		temp = itor.Next();
 	}
 	if (!found) {
 		cout << "\t찾는 이름의 item이 존재하지 않습니다.\n";
@@ -602,20 +604,19 @@ bool Application::SearchByNameMasterList()
 bool Application::SearchByPurchaseDayMasterList()
 {
 	DoublyIterator<ItemType> itor(m_MasterList);
-
 	ItemType item;
-	ItemType temp;
+	ItemType temp = itor.Next();
 	bool found = false;
 	item.SetPurchaseDayFromKB();
 
 
 	cout << "\n\t=====================Item PurchaseDay:" << item.GetPurchaseDay() << "=====================\n";
-	while (itor.NotNull()) {
-		temp = itor.Next();
+	while (itor.NextNotNull()) {
 		if (temp.GetPurchaseDay() == item.GetPurchaseDay()) {
 			temp.DisplayGoodsOnScreen();
 			found = true;
 		}
+		temp = itor.Next();
 	}
 	if (!found) {
 		cout << "\t찾는 구매일의 item이 존재하지 않습니다.\n";
@@ -628,8 +629,7 @@ bool Application::SearchByPurchaseDayMasterList()
 bool Application::SearchByPurchasePeriod()
 {
 	DoublyIterator<ItemType> itor(m_MasterList);
-
-	ItemType temp;
+	ItemType temp = itor.Next();
 	bool found = false;
 	int StartDay, EndDay;
 	cout << "\n\t찾으려는 구간의 시작일을 입력하시오(예: 19970602 (1997년6월2일)) :";
@@ -642,12 +642,12 @@ bool Application::SearchByPurchasePeriod()
 	}
 
 	cout << "\n\t=====================Item PurchaseDay:" << StartDay << "~" << EndDay << "=====================\n";
-	while (itor.NotNull()) {
-		temp = itor.Next();
+	while (itor.NextNotNull()) {
 		if (temp.GetPurchaseDay() >= StartDay && temp.GetPurchaseDay() <= EndDay) {
 			temp.DisplayGoodsOnScreen();
 			found = true;
 		}
+		temp = itor.Next();
 	}
 	if (!found) {
 		cout << "\t찾는 구간에 구매한 item이 존재하지 않습니다.\n";
@@ -678,14 +678,14 @@ void Application::MakeEmptyMasterList()
 // display all records in MasterList on screen
 void Application::DisplayAllItemMasterList()
 {
-	DoublyIterator<ItemType> itor(m_MasterList);
-
 	ItemType item;
+	DoublyIterator<ItemType> itor(m_MasterList);
+	item = itor.Next();
 
 	cout << "\t=====================MastserList=====================\n";
-	while (itor.NotNull()) {
-		item = itor.Next();
+	while (itor.NextNotNull()) {
 		item.DisplayGoodsOnScreen();
+		item = itor.Next(); 
 	}
 }
 

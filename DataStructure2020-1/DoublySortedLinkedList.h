@@ -125,6 +125,7 @@ inline void DoublySortedLinkedList<ItemType>::MakeEmpty()
 {
 	DoublyNodeType<ItemType>* pItem;
 	DoublyIterator<ItemType> itor(*this);
+	itor.Next();
 
 	while (itor.NextNotNull()) {
 		pItem = itor.m_pCurPointer;
@@ -181,10 +182,24 @@ inline bool DoublySortedLinkedList<ItemType>::Add(const ItemType& item)
 	}
 
 	else {
-		while (itor.NextNotNull()) {
-			if(itor.m_pCurPointer->info < item)
-			DoublyNodeType<ItemType>* pItem = new DoublyNodeType<ItemType>;
-			
+		while (1) {
+			if (itor.m_pCurPointer->info > item || itor.m_pCurPointer == m_pLast) {
+				DoublyNodeType<ItemType>* pItem = new DoublyNodeType<ItemType>;
+				pItem->info = item;
+				pItem->next = itor.m_pCurPointer;
+				pItem->prev = itor.m_pCurPointer->prev;
+				itor.m_pCurPointer->prev->next = pItem;
+				itor.m_pCurPointer->prev = pItem;
+				m_Length++;
+				return true;
+			}
+			else if (itor.m_pCurPointer->info < item) {
+				itor.Next();
+			}
+			else {
+				cout << "\tId가 중복되었습니다\n";
+				return false;
+			}
 		}
 	}
 }
