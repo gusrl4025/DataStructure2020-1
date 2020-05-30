@@ -133,7 +133,7 @@ public:
 		@post	container목록이 출력된다
 		@param	list	MasterList를 참조
 	*/
-	void DisplayAllDetailsContainer(DoublySortedLinkedList<ItemType>& list);
+	void DisplayAllDetailsContainer(BinarySearchTree<ItemType>& list);
 
 	bool operator==(const StorageType& storage) {
 		if (GetId() == storage.GetId()) return true;

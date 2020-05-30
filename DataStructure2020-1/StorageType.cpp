@@ -125,7 +125,7 @@ void StorageType::DisplayAllContainer()
 	}
 }
 
-void StorageType::DisplayAllDetailsContainer(DoublySortedLinkedList<ItemType>& list)
+void StorageType::DisplayAllDetailsContainer(BinarySearchTree<ItemType>& list)
 {
 	ContainerType container;
 	ContainerList.ResetList();

@@ -180,7 +180,7 @@ void ContainerType::DisplayAllPhoto()
 }
 
 // Container의 item을 masterlist에서 참조해서 display한다
-void ContainerType::DisplayAllDetailsItem(DoublySortedLinkedList<ItemType>& list)
+void ContainerType::DisplayAllDetailsItem(BinarySearchTree<ItemType>& list)
 {
 	SimpleItemType simpleitem;
 	m_SimpleItemList.ResetList();

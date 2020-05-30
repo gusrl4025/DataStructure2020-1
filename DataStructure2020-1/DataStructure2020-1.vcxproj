@@ -146,6 +146,7 @@
     <ClCompile Include="SimpleItemType.cpp" />
     <ClCompile Include="StorageType.cpp" />
     <ClCompile Include="TempType.cpp" />
+    <ClCompile Include="BinarySearchTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />

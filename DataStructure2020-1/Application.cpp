@@ -606,25 +606,31 @@ bool Application::RetrieveItemMasterList()
 	return false;
 }
 
+// Inorder(ID 순서) 순으로 탐색하여 종류가 같은 아이템을 출력한다
+void SearchByKind(BinaryTreeNode<ItemType>* root, const ItemType& item, bool& found) {
+	if (root != NULL) {
+		SearchByKind(root->left, item, found);
+		if (root->data.GetKind() == item.GetKind()) {
+			root->data.DisplayGoodsOnScreen();
+			found = true;
+		}
+		SearchByKind(root->right, item, found);
+	}
+}
+
 // item 종류를 입력받아 MasterList에서 검색한다
 bool Application::SearchByKindMasterList()
 {
-	DoublyIterator<ItemType> itor(m_MasterList);
-
 	ItemType item;
-	ItemType temp;
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	item.SetKindFromKB();
 
 	cout << "\n\t=====================Item Kind:" << item.GetKind() << "=====================\n";
-	while (itor.NextNotNull()) {
-		temp = itor.Next();
-		if (temp.GetKind() == item.GetKind()) {
-			temp.DisplayGoodsOnScreen();
-			found = true;
-		}
-		
-	}
+	
+	
+	SearchByKind(root, item, found);
+
 	if (!found) {
 		cout << "\t찾는 종류의 item이 존재하지 않습니다.\n";
 		return false;
@@ -633,23 +639,30 @@ bool Application::SearchByKindMasterList()
 
 }
 
+// Inorder(ID 순서) 순으로 탐색하여 이름이 같은 아이템을 출력한다
+void SearchByName(BinaryTreeNode<ItemType>* root, const ItemType& item, bool& found) {
+	if (root != NULL) {
+		SearchByKind(root->left, item, found);
+		if (root->data.GetName() == item.GetName()) {
+			root->data.DisplayGoodsOnScreen();
+			found = true;
+		}
+		SearchByName(root->right, item, found);
+	}
+}
+
 // item 이름을 입력받아 MasterList에서 검색한다
 bool Application::SearchByNameMasterList()
 {
-	DoublyIterator<ItemType> itor(m_MasterList);
 	ItemType item;
-	ItemType temp = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	item.SetNameFromKB();
 
 	cout << "\n\t=====================Item Name:" << item.GetName() << "=====================\n";
-	while (itor.NextNotNull()) {
-		if (temp.GetName() == item.GetName()) {
-			temp.DisplayGoodsOnScreen();
-			found = true;
-		}
-		temp = itor.Next();
-	}
+
+	SearchByName(root, item, found);
+
 	if (!found) {
 		cout << "\t찾는 이름의 item이 존재하지 않습니다.\n";
 		return false;
@@ -657,36 +670,54 @@ bool Application::SearchByNameMasterList()
 	return true;
 }
 
+// Inorder(ID 순서) 순으로 탐색하여 구매일 같은 아이템을 출력한다
+void SearchByPurchaseDay(BinaryTreeNode<ItemType>* root, const ItemType& item, bool& found) {
+	if (root != NULL) {
+		SearchByPurchaseDay(root->left, item, found);
+		if (root->data.GetPurchaseDay() == item.GetPurchaseDay()) {
+			root->data.DisplayGoodsOnScreen();
+			found = true;
+		}
+		SearchByPurchaseDay(root->right, item, found);
+	}
+}
+
 // item의 구매일을 입력받아 MasterList에서 검색한다
 bool Application::SearchByPurchaseDayMasterList()
 {
-	DoublyIterator<ItemType> itor(m_MasterList);
 	ItemType item;
-	ItemType temp = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	item.SetPurchaseDayFromKB();
 
-
 	cout << "\n\t=====================Item PurchaseDay:" << item.GetPurchaseDay() << "=====================\n";
-	while (itor.NextNotNull()) {
-		if (temp.GetPurchaseDay() == item.GetPurchaseDay()) {
-			temp.DisplayGoodsOnScreen();
-			found = true;
-		}
-		temp = itor.Next();
-	}
+
+	SearchByPurchaseDay(root, item, found);
+
 	if (!found) {
 		cout << "\t찾는 구매일의 item이 존재하지 않습니다.\n";
 		return false;
 	}
 	return true;
+	
+}
+
+// Inorder(ID 순서) 순으로 탐색하여 구매 기간안의 아이템을 출력한다
+void SearchByPurchasePeriod(BinaryTreeNode<ItemType>* root, const int& StartDay , const int& EndDay, bool& found) {
+	if (root != NULL) {
+		SearchByPurchasePeriod(root->left, StartDay, EndDay, found);
+		if (root->data.GetPurchaseDay() >= StartDay && root->data.GetPurchaseDay() >= EndDay) {
+			root->data.DisplayGoodsOnScreen();
+			found = true;
+		}
+		SearchByPurchasePeriod(root->right, StartDay, EndDay, found);
+	}
 }
 
 // item의 구매일을 구간으로 입력받아 MasterList에서 검색한다
 bool Application::SearchByPurchasePeriodMasterList()
 {
-	DoublyIterator<ItemType> itor(m_MasterList);
-	ItemType temp = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	int StartDay, EndDay;
 	cout << "\n\t찾으려는 구간의 시작일을 입력하시오(예: 19970602 (1997년6월2일)) :";
@@ -699,13 +730,9 @@ bool Application::SearchByPurchasePeriodMasterList()
 	}
 
 	cout << "\n\t=====================Item PurchaseDay:" << StartDay << "~" << EndDay << "=====================\n";
-	while (itor.NextNotNull()) {
-		if (temp.GetPurchaseDay() >= StartDay && temp.GetPurchaseDay() <= EndDay) {
-			temp.DisplayGoodsOnScreen();
-			found = true;
-		}
-		temp = itor.Next();
-	}
+	
+	SearchByPurchasePeriod(root, StartDay, EndDay, found);
+
 	if (!found) {
 		cout << "\t찾는 구간에 구매한 item이 존재하지 않습니다.\n";
 		return false;
@@ -732,18 +759,22 @@ void Application::MakeEmptyMasterList()
 	}
 }
 
+void DisplayAllItem(BinaryTreeNode<ItemType>* root) {
+	if (root != NULL) {
+		DisplayAllItem(root->left);
+		root->data.DisplayGoodsOnScreen();
+		DisplayAllItem(root->right);
+	}
+}
+
 // display all records in MasterList on screen
 void Application::DisplayAllItemMasterList()
 {
-	ItemType item;
-	DoublyIterator<ItemType> itor(m_MasterList);
-	item = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 
 	cout << "\t=====================MastserList=====================\n";
-	while (itor.NextNotNull()) {
-		item.DisplayGoodsOnScreen();
-		item = itor.Next(); 
-	}
+	
+	DisplayAllItem(root);
 }
 
 // move item in MasterList to TempList
@@ -1137,32 +1168,37 @@ void Application::MoveItemTempToMaster()
 	}
 }
 
+// Inorder(ID 순서) 순으로 탐색하여 구매일이 같은 아이템을 출력하고 총액을 더한다
+void AddExpenseSearchByPurchaseDay(BinaryTreeNode<ItemType>* root, const ItemType& item, int& sum, bool& found)
+{
+	if (root != NULL) {
+		AddExpenseSearchByPurchaseDay(root->left, item, sum, found);
+		if (root->data.GetName() == item.GetName()) {
+			root->data.DisplayNameOnScreen();
+			root->data.DisplayKindOnScreen();
+			root->data.DisplayPriceOnScreen();
+			root->data.DisplayIdOnScreen();
+			cout << "\n";
+			found = true;
+			sum += root->data.GetPrice();
+		}
+		AddExpenseSearchByPurchaseDay(root->right, item, sum, found);
+	}
+}
 // 날짜를 입력받아 그 날 구매한 물품 목록과 총액을 출력한다.
 void Application::DisplayDayExpenseRecord()
 {
 	// 찾고자하는 날짜를 입력한다
 	int m_Sum = 0;
-	DoublyIterator<ItemType> itor(m_MasterList);
 	ItemType item;
-	ItemType temp = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	item.SetPurchaseDayFromKB();
 
 	// 출력한 후 총액을 더한다
 	cout << "\n\t=====================Item PurchaseDay:" << item.GetPurchaseDay() << "=====================\n";
-	while (itor.NextNotNull()) {
-		if (temp.GetPurchaseDay() == item.GetPurchaseDay()) {
-			temp.DisplayNameOnScreen();
-			temp.DisplayKindOnScreen();
-			temp.DisplayPriceOnScreen();
-			temp.DisplayIdOnScreen();
-			cout << "\n";
-			found = true;
-			m_Sum += temp.GetPrice();
-		}
-		temp = itor.Next();
-	}
-
+	
+	AddExpenseSearchByPurchaseDay(root, item, m_Sum, found);
 
 	if (!found) {
 		cout << "\t해당하는 날에 구매한 item이 존재하지 않습니다.\n";
@@ -1172,13 +1208,30 @@ void Application::DisplayDayExpenseRecord()
 	cout << "\n\t===================" << item.GetPurchaseDay() << " 날 지출 총액 : " << m_Sum << "원===================\n";
 }
 
+// Inorder(ID 순서) 순으로 탐색하여 구매월이 같은 아이템을 출력하고 총액을 더한다
+void AddExpenseSearchByPurchaseMonth(BinaryTreeNode<ItemType>* root, const int& month, int* ExpenseSumPerKind, bool& found)
+{
+	if (root != NULL) {
+		AddExpenseSearchByPurchaseMonth(root->left, month, ExpenseSumPerKind, found);
+		if (root->data.GetPurchaseDay() / 100 == month) {
+			root->data.DisplayNameOnScreen();
+			root->data.DisplayPriceOnScreen();
+			root->data.DisplayKindOnScreen();
+			root->data.DisplayIdOnScreen();
+			cout << "\n";
+			found = true;
+			ExpenseSumPerKind[root->data.GetKind()] += root->data.GetPrice();
+		}
+		AddExpenseSearchByPurchaseMonth(root->right, month, ExpenseSumPerKind, found);
+	}
+}
+
 // 달을 입력받아 그 해의 소비 분석 결과가 출력된다.
 void Application::DisplayMonthExpenseRecord()
 {
 	// 물건 종류별로 배열을 만들어 값을 저장한다
 	int* ExpenseSumPerKind = new int[5]();
-	DoublyIterator<ItemType> itor(m_MasterList);
-	ItemType temp = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	int m_Month;
 	cout << "\n\t소비 내역을 알고 싶은 달을 입력하시오 (예: 202005 (2020년 5월)) :";
@@ -1189,18 +1242,8 @@ void Application::DisplayMonthExpenseRecord()
 
 	// MasterList에서 Item을 찾고 출력한다.
 	cout << "\n\t=====================Item PurchaseMonth:" << m_Month << "=====================\n";
-	while (itor.NextNotNull()) {
-		if (temp.GetPurchaseDay() / 100 == m_Month) {
-			temp.DisplayNameOnScreen();
-			temp.DisplayPriceOnScreen();
-			temp.DisplayKindOnScreen();
-			temp.DisplayIdOnScreen();
-			cout << "\n";
-			found = true;
-			ExpenseSumPerKind[temp.GetKind()] += temp.GetPrice();
-		}
-		temp = itor.Next();
-	}
+	
+	AddExpenseSearchByPurchaseMonth(root, m_Month, ExpenseSumPerKind, found);
 
 	if (!found) {
 		cout << "\t해당하는 달에 구매한 item이 존재하지 않습니다.\n";
@@ -1216,6 +1259,7 @@ void Application::DisplayMonthExpenseRecord()
 		}
 		// 최대로 많이 쓴 것을 차트에서 네모 25칸을 기준으로 한다
 		int PricePerBlock = ExpenseSumPerKind[MaxExpenseKind] / 25;
+		if (PricePerBlock == 0) PricePerBlock = 1;
 
 		int m_Sum = 0;
 
@@ -1239,18 +1283,34 @@ void Application::DisplayMonthExpenseRecord()
 	}
 }
 
+// Inorder(ID 순서) 순으로 탐색하여 구매년도가 같은 아이템을 출력하고 총액을 더한다
+void AddExpenseSearchByPurchaseYear(BinaryTreeNode<ItemType>* root, const int& year, int* ExpenseSumPerKind, int* ExpenseSumPerMonth, bool& found)
+{
+	if (root != NULL) {
+		AddExpenseSearchByPurchaseYear(root->left, year, ExpenseSumPerKind, ExpenseSumPerMonth, found);
+		if (root->data.GetPurchaseDay() / 10000 == year) {
+			int month = root->data.GetPurchaseDay() / 100;
+			root->data.DisplayNameOnScreen();
+			root->data.DisplayPriceOnScreen();
+			root->data.DisplayIdOnScreen();
+			cout << "\n";
+			found = true;
+			ExpenseSumPerKind[root->data.GetKind()] += root->data.GetPrice();
+			ExpenseSumPerMonth[month % 100 - 1] += root->data.GetPrice();
+		}
+		AddExpenseSearchByPurchaseYear(root->right, year, ExpenseSumPerKind, ExpenseSumPerMonth, found);
+	}
+}
+
 // 해를 입력받아 그 해의 소비 분석 결과가 출력된다.
 void Application::DisplayYearExpenseRecord()
 {	
 	// 물건 종류와 달 별로 배열을 만들어 각각에 값을 저장한다.
 	int* ExpenseSumPerKind = new int[5]();	
 	int* ExpenseSumPerMonth = new int[12]();
-
-	DoublyIterator<ItemType> itor(m_MasterList);
-	ItemType temp = itor.Next();
+	BinaryTreeNode<ItemType>* root = m_MasterList.GetRoot();
 	bool found = false;
 	int m_Year;
-	int m_Month;
 	cout << "\n\t소비 내역을 알고 싶은 년도를 입력하시오 (예: 2020 (2020년)) :";
 	cin >> m_Year;
 	while (m_Year < 1900 || m_Year > 2100) {
@@ -1260,19 +1320,8 @@ void Application::DisplayYearExpenseRecord()
 
 	// MasterList에서 Item을 찾고 출력한다.
 	cout << "\n\t=====================Item PurchaseYear:" << m_Year << "=====================\n";
-	while (itor.NextNotNull()) {
-		if (temp.GetPurchaseDay() / 10000 == m_Year) {
-			m_Month = temp.GetPurchaseDay() / 100;
-			temp.DisplayNameOnScreen();
-			temp.DisplayPriceOnScreen();
-			temp.DisplayIdOnScreen();
-			cout << "\n";
-			found = true;
-			ExpenseSumPerKind[temp.GetKind()] += temp.GetPrice();
-			ExpenseSumPerMonth[m_Month % 100 - 1] += temp.GetPrice();
-		}
-		temp = itor.Next();
-	}
+	
+	AddExpenseSearchByPurchaseYear(root->right, m_Year, ExpenseSumPerKind, ExpenseSumPerMonth, found);
 
 	if (!found) {
 		cout << "\t해당하는 해에 구매한 item이 존재하지 않습니다.\n";

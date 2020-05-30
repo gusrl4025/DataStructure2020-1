@@ -335,7 +335,7 @@ public:
 	void DisplayYearExpenseRecord();
 
 private:
-	DoublySortedLinkedList<ItemType> m_MasterList;
+	BinarySearchTree<ItemType> m_MasterList;
 	TempType m_TempList;
 	SortedList<StorageType> m_StorageList;
 	int m_Command;

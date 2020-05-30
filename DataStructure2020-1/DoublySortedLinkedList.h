@@ -38,7 +38,12 @@ public:
 	*/
 	int GetLength() const;
 
-
+	/*
+		@brief	List가 비었는지 검사한다
+		@pre	list가 iniitialize 돼야한다
+		@post	none
+		@return	list가 empty면 return true, 아니면 return false
+	*/
 	bool IsEmpty() const;
 
 	/*
