@@ -13,6 +13,17 @@ public:
 		m_Price = 0;
 		m_Id = 0;
 		m_ContainerId = -1;
+		m_StorageId = -1;
+	}
+
+	ItemType(int InId) {
+		m_Kind = 0;
+		m_PurchaseDay = 0;
+		m_Name = "";
+		m_Price = 0;
+		m_Id = InId;
+		m_ContainerId = -1;
+		m_StorageId = -1;
 	}
 
 	/*
@@ -293,6 +304,13 @@ public:
 		@post	StorageId of Goods is on screen
 	*/
 	void DisplayStorageIdOnScreen();
+
+	/*
+		@brief	display Goods record except storage on screeen
+		@pre	none
+		@post	StorageId of Goods is on screen
+	*/
+	void DisplayGoodsExceptStorageOnScreen();
 
 	/*
 		@brief	display Goods record on screeen

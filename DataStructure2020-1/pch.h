@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
@@ -19,6 +20,8 @@ using namespace std;
 #include "CircularQueue.h"
 #include "DoublySortedLinkedList.h"
 #include "DoublyIterator.h"
+#include "DoublyLinkedQueue.h"
+#include "BinarySearchTree.h"
 
 #include "ItemType.h"
 #include "SimpleItemType.h"

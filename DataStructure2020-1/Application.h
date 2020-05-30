@@ -9,6 +9,7 @@ public:
 	*/
 	Application() {
 		m_Command = 0;
+		m_Money = 0;
 	}
 
 	/*
@@ -26,6 +27,7 @@ public:
 	int RunStorage();
 	void RunContainer(int InStorageId);
 	void RunTemp();
+	void RunAccountBook();
 
 	/*
 		@brief	shows menu and receive the command from keyboard
@@ -38,6 +40,7 @@ public:
 	int GetCommandStorage();
 	int GetCommandContainer(int InStorageId);
 	int GetCommandTemp();
+	int GetCommandAccountBook();
 
 	/*
 		@brief	Item을 입력받아 ContainerId가 있으면 MasterList -1이면 TempList에 넣는다.
@@ -102,7 +105,7 @@ public:
 		@post	the records wanted to find displayed on screen
 		@return if function works return true, otherwise return false
 	*/
-	bool SearchByPurchasePeriod();
+	bool SearchByPurchasePeriodMasterList();
 
 	/*
 		@brief	make MasterList empty
@@ -148,7 +151,7 @@ public:
 		@pre	MasterList와 storageList가 초기화돼야함
 		@post	입력받은 Storage안에 있는 container의 상세 정보와 리스트가 출력됨
 	*/
-	//void DisPlayAllDetailsContainer();
+	void DisPlayAllDetailsContainer();
 	//----------------------- RunContainer ---------------------------------------------------
 
 	/*
@@ -306,14 +309,37 @@ public:
 		@brief	move all items in TempList to MasterList
 		@pre	MasterList and TempList should be initialized
 		@post	items in TempList moved to MasterList
-		@return if function works return true, otherwise return false
 	*/
 	void MoveItemTempToMaster();
+
+	//---------------AccountBook--------------------------------
+	/*
+		@brief	날짜를 입력받아 그 날 구매한 물품 목록과 총액을 출력한다.
+		@pre	MasterList가 초기화돼야된다.
+		@post	입력한 날짜에 구매한 물품과 총액이 출력된다.
+	*/
+	void DisplayDayExpenseRecord();
+
+	/*
+		@brief	달을 입력받아 그 달의 소비 분석 결과가 출력된다.
+		@pre	MasterList가 초기화돼야한다
+		@post	입력받은 달 구매한 물품 목록, 소비 패턴을 분석한 차트, 총액을 출력한다.
+	*/
+	void DisplayMonthExpenseRecord();
+	
+	/*
+		@brief	해를 입력받아 그 해의 소비 분석 결과가 출력된다.
+		@pre	MasterList가 초기화돼야한다
+		@post	입력받은 해에 구매한 물품 목록, 소비 패턴을 분석한 차트, 총액을 출력한다.
+	*/
+	void DisplayYearExpenseRecord();
+
 private:
 	DoublySortedLinkedList<ItemType> m_MasterList;
 	TempType m_TempList;
 	SortedList<StorageType> m_StorageList;
 	int m_Command;
+	int m_Money;
 };
 
 
